@@ -5,6 +5,11 @@
 
 
 char* extractName(char* path){
+    char* name = NULL;
+    if(!path){
+        return name;
+    }
+
     int b = -1, d = 0;
     int size = (int) strlen(path);
 
@@ -18,33 +23,36 @@ char* extractName(char* path){
     }
 
     if(b == -1 && d == 0){
-        char * name = malloc((strlen(path) + 1) * sizeof(char));
+        name = (char *) malloc((strlen(path) + 1) * sizeof(char));
         strcpy(name, path);
         return name;
     }
 
-    char *name = malloc((strlen(path) - b + 1) * sizeof(char));
+    name = (char *) malloc((strlen(path) - (d - 1) - b + 1) * sizeof(char));
 
-    strncpy(name, &(path[b+1]), (d - 1) - b);
-    printf("\n\n%s\n\n\n",name);
-
+    strncpy(name, &(path[b+1]),((d - 1) - b));
+    printf("\nName = %s\nPath = %s\n",name,path);
+//    name[strlen(name) + 1] = 0;
+//    printf("%s",name);
     return name;
 }
 
 char* catPath(char* path1, char* path2){
+    char * fullPath;
 
     if(!path1){
-        char * fullPath = (char *) malloc((strlen(path2) + 1) * sizeof(char));
+        fullPath = (char *) malloc((strlen(path2) + 1) * sizeof(char));
         strcpy(fullPath, path2);
         return fullPath;
     }else if(!path2){
         char * fullPath = (char *) malloc((strlen(path1) + 1) * sizeof(char));
         strcpy(fullPath, path1);
         return fullPath;
+    }else if(!path1 && !path2){
+        return NULL;
     }
 
-    char * fullPath;
-    printf("%s",path1);
+//    printf("%s",path1);
 
     if(path1[strlen(path1) - 1] != '/'){
         fullPath = (char *) malloc((strlen(path1) + strlen(path2) + 2) * sizeof(char));
@@ -57,6 +65,11 @@ char* catPath(char* path1, char* path2){
 }
 
 char* extractExtension(char* path){
+    char *extension = NULL;
+    if(!path){
+        return extension;
+    }
+
     int d;
     int size = (int) strlen(path);
 
@@ -66,19 +79,20 @@ char* extractExtension(char* path){
             break;
         }
     }
-    char *extension = (char *) malloc((strlen(path) - d + 1) * sizeof(char));
+    extension = (char *) malloc((strlen(path) - d + 1) * sizeof(char));
     strcpy(extension, &(path[d + 1]));
-    printf("%s",extension);
+//    printf("%s",extension);
     return extension;
 }
 
 char* insertExtension(char* name, char* extension){
+    char * fullFile = NULL;
 
     if(!name || !extension){
-        return NULL;
+        return fullFile;
     }
 
-    char *fullFile = (char *) malloc((strlen(name) + strlen(extension) + 2) * sizeof(char));
+    fullFile = (char *) malloc((strlen(name) + strlen(extension) + 2) * sizeof(char));
     sprintf(fullFile,"%s.%s",name, extension);
 
     return fullFile;

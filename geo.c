@@ -13,7 +13,7 @@ void readGeo(char* path, char* name, List *list, int swList){
 
     char* fullPathGeo = catPath(path, name);
 
-printf("%s\n%s\n%s",path,name,fullPathGeo);
+    printf("%s\n%s\n%s",path,name,fullPathGeo);
 
     FILE *geo = fopen(fullPathGeo,"r");
 

@@ -6,9 +6,9 @@
 
 
 void createSvg(FILE *svg, char* path, char* name){
-    char *aux = (char *) malloc(4 * sizeof(char));
-    strcpy(aux,"svg");
-    char *nameArqSvg = insertExtension(name, aux);
+    char s[] = "svg";
+    char* nameSvg = s;
+    char *nameArqSvg = insertExtension(name, nameSvg);
     char *fullPathSvg = catPath(path, nameArqSvg);
 
     svg = fopen(fullPathSvg, "w");
@@ -25,11 +25,12 @@ void createSvg(FILE *svg, char* path, char* name){
     fclose(svg);
     free(nameArqSvg);
     free(fullPathSvg);
-    free(aux);
 }
 
 void endSvg(FILE *svg, char* path, char* name){
-    char *nameArqSvg = insertExtension(name, "svg");
+    char s[] = "svg";
+    char* nameSvg = s;
+    char *nameArqSvg = insertExtension(name, nameSvg);
     char *fullPathSvg = catPath(path, nameArqSvg);
 
     svg = fopen(fullPathSvg, "a");
@@ -49,7 +50,9 @@ void endSvg(FILE *svg, char* path, char* name){
 }
 
 void drawRectangle(FILE *svg, char* path, char* name, Rectangle rectangle){
-    char *nameArqSvg = insertExtension(name, "svg");
+    char s[] = "svg";
+    char* nameSvg = s;
+    char *nameArqSvg = insertExtension(name, nameSvg);
     char *fullPathSvg = catPath(path, nameArqSvg);
 
     double x, y, height, width;

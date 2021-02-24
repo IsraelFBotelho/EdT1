@@ -21,13 +21,16 @@ int main(int argc, char* argv[]){
     FILE * svg = NULL;
 
     readArgv(argc, argv, &pathOut, &pathIn, &nameArqGeo, &nameArqQry, &swList);
-
+    if(!pathOut && !nameArqGeo){
+        exit(1);
+    }
     printf("%s\n%s\n%s\n%s\n",pathOut, pathIn, nameArqGeo, nameArqQry);
 
 
     readGeo(pathIn, nameArqGeo, &listRect, swList);
 
     nameArqSvg = extractName(nameArqGeo);
+    printf("\n%s\n",nameArqSvg);
 
     createSvg(svg, pathOut, nameArqSvg);
 
