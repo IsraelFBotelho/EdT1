@@ -1,10 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "qry.h"
 #include "list.h"
 #include "rectangle.h"
 #include "path.h"
+#include "svg.h"
+
+void setOverlapColor(Rectangle rect1, Rectangle rect2);
+int isOverlapped(Rectangle rect1, Rectangle rect2);
 
 void readQry(char *path, char *nameQry, char *nameGeo, List list, int swList){
 
@@ -48,36 +53,105 @@ void readQry(char *path, char *nameQry, char *nameGeo, List list, int swList){
     free(fullPathQry);
 }
 
-void tpCommand(List list, char *nameQry, char *nameGeo, int swList){
-
-    char tp[getListSize(list,swList)][30];
-    int size = 0;
-    
-    for(Node aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
-        for(Node aux2 = getNext(list, aux, swList); aux2; aux2 = getNext(list, aux2, swList)){
-            Rectangle rect1 = getInfo(aux,swList);
-            Rectangle rect2 = getInfo(aux2, swList);
-
-            double x1, x2, w1, w2, h1, h2, y1, y2;
-            x1 = getRectangleX(rect1);
-            x2 = getRectangleX(rect2);
-            y1 = getRectangleY(rect1);
-            y2 = getRectangleY(rect2);
-            w1 = getRectangleWidth(rect1);
-            w2 = getRectangleWidth(rect2);
-            h1 = getRectangleHeight(rect1);
-            h2 = getRectangleHeight(rect2);
-
-            if((x1 <= x2 && x1 + h1 >= x2) || (x2 <= x1 && x2 + h2 >= x1)){
-                if((y1 <= y2 && y1 + w1 >= y2) || (y2 <= y1 && y2 + w2 >= y1)){
-                    strcpy(tp[size],getRectangleId(rect1));
-                    size++;
-                    strcpy(tp[size],getRectangleId(rect2));
-                    size++;
-                    printf("Chegou aqui\n");
-                    break;
-                }
+void tpCommand(List list, int swList){
+    for(Node *aux = getFirst(list,swList); aux;){
+        int test = 1;
+        for(Node *aux2 = getNext(list,aux,swList); aux2; aux2 = getNext(list,aux2,swList)){
+            if(isOverlapped(getInfo(aux, swList),getInfo(aux2, swList))){
+                setOverlapColor(getInfo(aux,swList),getInfo(aux2,swList));
             }
         }
+        for(Node *aux2 = getFirst(list,swList); aux2; aux2 = getNext(list,aux2,swList)){
+            if(isOverlapped(getInfo(aux,swList), getInfo(aux2, swList)) && aux != aux2){
+                test = 0;
+                break;
+            }
+        }
+        if(test && getInfo(aux,swList)){
+            Node *aux2 = aux;
+            aux = getNext(list,aux,swList);
+            Rectangle rect = getInfo(aux2,swList);
+            endRectangle(rect);
+            if(swList){
+                removeNode(list, aux2, swList);
+            }
+        }else{
+            aux = getNext(list,aux,swList);
+        }
     }
+    if(!swList){
+        sRemoveAllNullNode(list,swList);
+    }
+}
+
+void setOverlapColor(Rectangle rect1, Rectangle rect2){
+    srand(time(NULL));
+
+    char color[30];
+
+    int r = rand() % 10;
+
+    switch(r){
+        case 1:
+            strcpy(color,"lightcyan");
+            break;
+        case 2:
+            strcpy(color,"lightgoldenrodyellow");
+            break;
+        case 3:
+            strcpy(color,"lightgrey");
+            break;
+        case 4:
+            strcpy(color,"lightsalmon");
+            break;
+        case 5:
+            strcpy(color,"lightcoral");
+            break;
+        case 6:
+            strcpy(color,"lightskyblue");
+            break;
+        case 7:
+            strcpy(color,"lightyellow");
+            break;
+        case 8:
+            strcpy(color,"lightpink");
+            break;
+        case 9:
+            strcpy(color,"lightseagreen");
+            break;
+        case 10:
+            strcpy(color,"lightsteelblue");
+            break;
+        default:
+            strcpy(color,"black");
+            break;
+    }
+
+    setRectangleFill(rect1, color);
+    setRectangleFill(rect2, color);
+}
+
+int isOverlapped(Rectangle rect1, Rectangle rect2){
+
+    if(!rect1 || !rect2){
+        return 0;
+    }
+
+    double x1, x2, w1, w2, h1, h2, y1, y2;
+
+        x1 = getRectangleX(rect1);
+        x2 = getRectangleX(rect2);
+        y1 = getRectangleY(rect1);
+        y2 = getRectangleY(rect2);
+        w1 = getRectangleWidth(rect1);
+        w2 = getRectangleWidth(rect2);
+        h1 = getRectangleHeight(rect1);
+        h2 = getRectangleHeight(rect2);
+
+        if((x1 <= x2 && x1 + h1 >= x2) || (x2 <= x1 && x2 + h2 >= x1)){
+            if((y1 <= y2 && y1 + w1 >= y2) || (y2 <= y1 && y2 + w2 >= y1)){
+                return 1;
+            }
+        }
+        return 0;
 }

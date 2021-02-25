@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
 
     readGeo(pathIn, nameArqGeo, &listRect, swList);
 
-//    tpCommand(listRect,nameArqQry, nameArqGeo, swList);
+   tpCommand(listRect, swList);
 
     writeSvg(listRect, pathOut, nameArqGeo, swList);
 
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
     free(nameArqGeo);
     free(pathIn);
     free(nameArqQry);
-    endAllRectangle(listRect,swList);
+//    endAllRectangle(listRect,swList);
 //    printf("%d", getListVisit(listRect,swList));
     endList(listRect, swList);
     return 0;

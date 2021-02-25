@@ -3,6 +3,6 @@
 
 #include "list.h"
 
-void tpCommand(List list, char *nameQry, char *nameGeo, int swList);
+void tpCommand(List list, int swList);
 
 #endif

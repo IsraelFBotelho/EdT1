@@ -82,4 +82,6 @@ int getListSize(List list, int swList);
 */
 int getListVisit(List list, int swList);
 
+void sRemoveAllNullNode(List slist, int swList);
+
 #endif

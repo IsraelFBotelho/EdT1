@@ -265,13 +265,15 @@ void sInsertElement(List slist, Info info){
 
 void sRemoveNode(List slist, Node snode){
     SListStruct *slist_aux = (SListStruct *) slist;
+    SNodeStruct *snode_aux = (SNodeStruct *) snode;
 
     if(slist_aux->size == 0){
         return;
     }
     sRelocateElement(slist, snode);
-    slist_aux->array[slist_aux->size - 2].next = NULL;
+    // slist_aux->array[slist_aux->size - 2].next = NULL;
     slist_aux->tail = &(slist_aux->array[slist_aux->size - 2]);
+    slist_aux->tail->next = NULL;
     slist_aux->size--;
 }
 
@@ -337,12 +339,30 @@ void endList(List list, int swList){
     }
 }
 
+
 void removeNode(List list, Node node, int swList){
     if(swList){
         dRemoveNode(list, node);
     }else{
         sRemoveNode(list, node);
     }
+}
+
+void sRemoveAllNullNode(List slist, int swList){
+    SListStruct * slist_aux = (SListStruct *) slist;
+    SNodeStruct *aux = slist_aux->head;
+
+    do{
+        if(aux->info == NULL){
+            removeNode(slist, aux, swList);
+            aux = slist_aux->head;
+            slist_aux->visit++;
+        }else{
+            aux = aux->next;
+            slist_aux->visit++;
+        }
+
+    }while(slist_aux->size > 0);
 }
 
 Info getInfo(Node node, int swList){
