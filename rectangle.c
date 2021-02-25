@@ -34,14 +34,8 @@ void endRectangle(Rectangle rectangle){
 }
 
 void endAllRectangle(List list, int swList){
-    Node * node_aux = getFirst(list, swList);
 
-    if(node_aux){
-        endRectangle(getInfo(node_aux, swList));
-    }
-
-    while(getNext(list, node_aux, swList)){
-        node_aux = getNext(list, node_aux, swList);
+    for(Node* node_aux = getFirst(list, swList); node_aux; node_aux = getNext(list, node_aux, swList)){
         endRectangle(getInfo(node_aux, swList));
     }
 }

@@ -22,15 +22,15 @@ int main(int argc, char* argv[]){
 
     readGeo(pathIn, nameArqGeo, &listRect, swList);
 
-    writeSvg(listRect,pathOut,nameArqGeo, swList);
+    writeSvg(listRect, pathOut, nameArqGeo, swList);
 
-    printf("%d", getListVisit(listRect,swList));
 
     free(pathOut);
     free(nameArqGeo);
     free(pathIn);
     free(nameArqQry);
     endAllRectangle(listRect,swList);
+    printf("%d", getListVisit(listRect,swList));
     endList(listRect, swList);
     return 0;
 }
