@@ -76,12 +76,12 @@ void drawRectangle(FILE *svg, char* path, char* name, Rectangle rectangle){
     fill = getRectangleFill(rectangle);
     stroke = getRectangleStroke(rectangle);
     
-    fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\"/>\n",id, x, y, width, height, stroke, fill);
+    fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"50%%\"/>\n",id, x, y, width, height, stroke, fill);
     fflush(svg);
     fclose(svg);
     free(nameArqSvg);
     free(fullPathSvg);
-
+    
 }
 
 void writeSvg(List list, char *pathOut, char * nameArq, int swList){
