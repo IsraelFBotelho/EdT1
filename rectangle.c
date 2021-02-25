@@ -40,7 +40,6 @@ void endAllRectangle(List list, int swList){
     }
 }
 
-
 char* getRectangleId(Rectangle rectangle){
     RectangleStruct *rectangle_aux = (RectangleStruct *) rectangle;
 
