@@ -24,6 +24,8 @@ int main(int argc, char* argv[]){
 
     writeSvg(listRect,pathOut,nameArqGeo, swList);
 
+    printf("%d", getListVisit(listRect,swList));
+
     free(pathOut);
     free(nameArqGeo);
     free(pathIn);

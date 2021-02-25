@@ -62,7 +62,6 @@ void dEndList(List list){
     }
 
     free(list_aux);
-    printf("Uma lista foi encerrada!!\n");
 }
 
 void dInsertElement(List list, Info info){
@@ -218,6 +217,11 @@ void sRelocateElement(List slist, Node snode){
 List sCreateList(int nx){
     SListStruct *new = (SListStruct *) malloc(sizeof(SListStruct));
 
+    if(nx == 0){
+        free(new);
+        exit(1);
+    }
+
     new->nx = nx;
     new->size = 0;
     new->visit = 0;
@@ -235,7 +239,6 @@ void sEndList(List slist){
     SListStruct *slist_aux = (SListStruct *) slist;
     free(slist_aux->array);
     free(slist_aux);
-    printf("Lista Estatica Encerrada!!\n");
 }
 
 void sInsertElement(List slist, Info info){
