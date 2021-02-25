@@ -15,13 +15,6 @@ char* extractName(char* path);
 char* catPath(char* path1, char* path2);
 
 /*
-* Recupera a extensão de um arquivo, estando ele dentro ou nao de um caminho
-* Pre: Um char* com o nome e extensao e/ou caminho do arquivo
-* Pos: Um char* com a extensao do arquivo
-*/
-char* extractExtension(char *path);
-
-/*
 * Recupera um nome de arquivo com extensao, somente nome e extensao, sem caminho
 * Pre: Um char* com o nome do arquivo, Um char* com a extensao do arquivo
 * Pos: Um char* com o arquivo com extensao

@@ -5,68 +5,35 @@
 #include "rectangle.h"
 
 
-void createSvg(FILE *svg, char* path, char* name){
-    char s[] = "svg";
-    char* nameSvg = s;
-    char *nameArqSvg = insertExtension(name, nameSvg);
-    char *fullPathSvg = catPath(path, nameArqSvg);
+FILE* createSvg(char *fullPathSvg){
 
-    svg = fopen(fullPathSvg, "w");
+    FILE *svg = fopen(fullPathSvg, "w");
 
     if(!svg){
-        fclose(svg);
         printf("Erro na criacao do SVG!!\n");
-        free(nameArqSvg);
         free(fullPathSvg);
         exit(1);
     }
 
     fprintf(svg, "<svg xmlns=\"http://www.w3.org/2000/svg\">\n");
-    fclose(svg);
-    free(nameArqSvg);
-    free(fullPathSvg);
+    return svg;
 }
 
-void endSvg(FILE *svg, char* path, char* name){
-    char s[] = "svg";
-    char* nameSvg = s;
-    char *nameArqSvg = insertExtension(name, nameSvg);
-    char *fullPathSvg = catPath(path, nameArqSvg);
-
-    svg = fopen(fullPathSvg, "a");
+void endSvg(FILE *svg){
 
     if(!svg){
-        fclose(svg);
         printf("Erro na finalizacao do SVG!!\n");
-        free(nameArqSvg);
-        free(fullPathSvg);
         exit(1);
     }
 
     fprintf(svg, "</svg>");
     fclose(svg);
-    free(nameArqSvg);
-    free(fullPathSvg);
 }
 
-void drawRectangle(FILE *svg, char* path, char* name, Rectangle rectangle){
-    char s[] = "svg";
-    char* nameSvg = s;
-    char *nameArqSvg = insertExtension(name, nameSvg);
-    char *fullPathSvg = catPath(path, nameArqSvg);
+void drawRectangle(FILE *svg, Rectangle rectangle){
 
     double x, y, height, width;
     char *id, *fill, *stroke;
-
-    svg = fopen(fullPathSvg, "a");
-
-    if(!svg){
-        fclose(svg);
-        printf("Erro na edicao do SVG!!\n");
-        free(nameArqSvg);
-        free(fullPathSvg);
-        exit(1);
-    }
 
     x = getRectangleX(rectangle);
     y = getRectangleY(rectangle);
@@ -77,27 +44,26 @@ void drawRectangle(FILE *svg, char* path, char* name, Rectangle rectangle){
     stroke = getRectangleStroke(rectangle);
     
     fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"50%%\"/>\n",id, x, y, width, height, stroke, fill);
-    fflush(svg);
-    fclose(svg);
-    free(nameArqSvg);
-    free(fullPathSvg);
-    
 }
 
 void writeSvg(List list, char *pathOut, char * nameArq, int swList){
-    FILE *svg = NULL;
+    char s[] = "svg";
+    char* nameSvg = s;
+    char *nameArqExtr =(char *) extractName(nameArq);
+    char *nameArqSvg = insertExtension(nameArqExtr, nameSvg);
+    char *fullPathSvg = catPath(pathOut, nameArqSvg);
 
-    char *nameArqSvg =(char *) extractName(nameArq);
-
-    createSvg(svg, pathOut, nameArqSvg);
+    FILE* svg = createSvg(fullPathSvg);
 
 
     for(Node aux = getFirst(list, swList); aux ; aux = getNext(list, aux, swList)){
 
-        drawRectangle(svg, pathOut, nameArqSvg, getInfo(aux, swList));
+        drawRectangle(svg, getInfo(aux, swList));
     }
 
-    endSvg(svg, pathOut, nameArqSvg);
+    endSvg(svg);
 
+    free(nameArqExtr);
     free(nameArqSvg);
+    free(fullPathSvg);
 }

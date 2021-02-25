@@ -4,32 +4,16 @@
 #include "path.h"
 
 
-char* extractName(char* path){
-    char* name = NULL;
+char* extractName(char* path_aux){
 
-    int b = -1, d = 0;
-    int size = (int) strlen(path);
+    char * path = (char *) malloc((strlen(path_aux) + 1) *sizeof(char));
+    strcpy(path,path_aux);
 
-    for(int i = 0; i < size ; i++){
-        if(path[i] == '/'){
-            b = i;
+    char *name = NULL;
 
-        } else if(path[i] == '.'){
-            d = i;
-        }
-    }
+    name = strchr(path, '/') != NULL ? strrchr(path, '/') + 1 : path;
+    name = strtok(name, ".");
 
-    if(b == -1 && d == 0){
-        name = (char *) malloc((strlen(path) + 1) * sizeof(char));
-        strcpy(name, path);
-        return name;
-    }
-
-    name = (char *) malloc((strlen(path) - (d - 1) - b + 1) * sizeof(char));
-
-    strncpy(name, &(path[b+1]),((d - 1) - b + 1));
-    int siz = (int) strlen(path) - d - 1 - b + 1;
-    name[siz] = '\0';
     return name;
 }
 
@@ -56,26 +40,6 @@ char* catPath(char* path1, char* path2){
         sprintf(fullPath,"%s%s",path1,path2);
     }
     return fullPath;
-}
-
-char* extractExtension(char* path){
-    char *extension = NULL;
-    if(!path){
-        return extension;
-    }
-
-    int d;
-    int size = (int) strlen(path);
-
-    for(int i = 0; i < size ; i++){
-        if(path[i] == '.'){
-            d = i;
-            break;
-        }
-    }
-    extension = (char *) malloc((strlen(path) - d + 1) * sizeof(char));
-    strcpy(extension, &(path[d + 1]));
-    return extension;
 }
 
 char* insertExtension(char* name, char* extension){
