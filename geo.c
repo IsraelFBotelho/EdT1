@@ -45,7 +45,6 @@ void readGeo(char* path, char* name, List *list, int swList){
             insertElement(*list, aux, swList);
         }
     }
-    printf("%d",getListSize(*list, swList));
     free(fullPathGeo);
     fclose(geo);
 }

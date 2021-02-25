@@ -8,7 +8,7 @@
 char* extractName(char* path);
 
 /*
-* Concatena dois caminhos, em caso de barras e/ou pontos duplos, ele corrige
+* Concatena dois caminhos, em caso de barra dupla na concatenaçao, ele corrige
 * Pre: Um char* com o caminho, Um char* com o caminho
 * Pos: Um char* com o caminho combinado
 */

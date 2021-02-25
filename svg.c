@@ -83,3 +83,21 @@ void drawRectangle(FILE *svg, char* path, char* name, Rectangle rectangle){
     free(fullPathSvg);
 
 }
+
+void writeSvg(List list, char *pathOut, char * nameArq, int swList){
+    FILE *svg = NULL;
+
+    char *nameArqSvg =(char *) extractName(nameArq);
+
+    createSvg(svg, pathOut, nameArqSvg);
+
+
+    for(Node aux = getFirst(list, swList); aux ; aux = getNext(list, aux, swList)){
+
+        drawRectangle(svg, pathOut, nameArqSvg, getInfo(aux, swList));
+    }
+
+    endSvg(svg, pathOut, nameArqSvg);
+
+    free(nameArqSvg);
+}

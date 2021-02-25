@@ -36,7 +36,7 @@ typedef struct slistStruct{
         Funções de Lista Dinamica Duplamente Encadeada
 */
 
-
+void dRemoveNode(List list, Node node);
 
 
 List dCreateList(){
@@ -85,8 +85,6 @@ void dInsertElement(List list, Info info){
         list_aux->tail = new;
         list_aux->size++;
     }
-
-//    printf("Nó criado!!\n");
 }
 
 void dInsertAfter(List list, Node node, Info info){
@@ -109,6 +107,7 @@ void dInsertAfter(List list, Node node, Info info){
             new->next = node_aux->next;
             if(aux->next){
                 aux = aux->next;
+                list_aux->visit++;
                 aux->back = new;
             }
             node_aux->next = new;
@@ -117,10 +116,11 @@ void dInsertAfter(List list, Node node, Info info){
             list_aux->size++;
             break;
         }
-        if(aux->next)
+        if(aux->next){
             aux = aux->next;
+            list_aux->visit++;
+        }
     }
-//    printf("Nó criado!!\n");
 }
 
 void dRemoveNode(List list, Node node){
@@ -132,7 +132,6 @@ void dRemoveNode(List list, Node node){
         return;
 
     if(!node_aux){
-        printf("Erro, no nao encontrado!!\n");
         return;
     }
        
@@ -156,9 +155,6 @@ void dRemoveNode(List list, Node node){
 
     free(node_aux);
     list_aux->size--;
-    
-
-//    printf("Um no desalocado!!\n");
 }
 
 Info dGetInfo(Node node){
@@ -193,9 +189,13 @@ Node dGetBack(List list, Node node){
 int dGetListSize(List list){
     ListStruct *list_aux = (ListStruct *) list;
 
-    printf("%d",list_aux->size);
-    fflush(stdout);
     return list_aux->size;
+}
+
+int dGetListVisit(List list){
+    ListStruct *list_aux = (ListStruct *) list;
+
+    return list_aux->visit;
 }
 
 /*
@@ -220,6 +220,7 @@ List sCreateList(int nx){
 
     new->nx = nx;
     new->size = 0;
+    new->visit = 0;
     new->array = (SNodeStruct *) malloc(nx * sizeof(SNodeStruct));
 
     new->head = NULL;
@@ -262,15 +263,13 @@ void sInsertElement(List slist, Info info){
 void sRemoveNode(List slist, Node snode){
     SListStruct *slist_aux = (SListStruct *) slist;
 
-    if(slist_aux->size == 0)
+    if(slist_aux->size == 0){
         return;
-    
+    }
     sRelocateElement(slist, snode);
     slist_aux->array[slist_aux->size - 2].next = NULL;
     slist_aux->tail = &(slist_aux->array[slist_aux->size - 2]);
     slist_aux->size--;
-
-//    printf("Um No foi Removido!!\n");
 }
 
 Info sGetInfo(Node snode){
@@ -298,6 +297,12 @@ int sGetListSize(List slist){
     SListStruct *slist_aux = (SListStruct *) slist;
 
     return slist_aux->size;
+}
+
+int sGetListVisit(List slist){
+    SListStruct *slist_aux = (SListStruct *) slist;
+
+    return slist_aux->visit;
 }
 
 /*
@@ -366,5 +371,13 @@ int getListSize(List list, int swList){
         return dGetListSize(list);
     }else{
         return sGetListSize(list);
+    }
+}
+
+int getListVisit(List list, int swList){
+    if(swList){
+        return dGetListVisit(list);
+    }else{
+        return sGetListVisit(list);
     }
 }

@@ -25,14 +25,12 @@ Rectangle createRectangle(double x, double y, double height, double width, char 
     strcpy(new->fill, fill);
     strcpy(new->stroke, stroke);
     
-//    printf("Retangulo criado!!\n");
     return new;
 }
 
 void endRectangle(Rectangle rectangle){
     RectangleStruct *rectangle_aux = (RectangleStruct *) rectangle;
     free(rectangle_aux);
-//    printf("Um retangulo foi desalocado!!\n");
 }
 
 void endAllRectangle(List list, int swList){
@@ -101,9 +99,4 @@ void setRectangleStroke(Rectangle rectangle, char stroke[25]){
     RectangleStruct *rectangle_aux = (RectangleStruct *) rectangle;
 
     strcpy(rectangle_aux->stroke, stroke);
-}
-
-void printInfos(Rectangle rectangle){
-    RectangleStruct *rectangle_aux = (RectangleStruct *) rectangle;
-    printf("Informacoes do retangulo sao: %lf %lf %lf %lf %s %s %s\n",rectangle_aux->x, rectangle_aux->y, rectangle_aux->height, rectangle_aux->width, rectangle_aux->id, rectangle_aux->fill, rectangle_aux->stroke);
 }

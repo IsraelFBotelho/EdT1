@@ -5,10 +5,8 @@
 
 typedef void* Rectangle;
 
-
-
 /*
-* Cria uma estrutura de informaçoes de um retangulo e as preenche
+* Cria uma estrutura de um retangulo e as preenche
 * Pre: Um double com valor, Um double com valor, Um double com valor, Um double com valor, Um char[30] com valor, Um char[25] com valor, Um char[25] com valor
 * Pos: Retorna um void* com o endereço do retangulo
 */
@@ -20,7 +18,11 @@ Rectangle createRectangle(double x, double y, double height, double width, char 
 * Pos: Nenhum retorno
 */
 void endRectangle(Rectangle rectangle);
-
+/*
+* Encerra todos as estruturas de informaçoes dos retangulos de uma lista
+* Pre Um void* com o endereço da lista, Um int com o swList
+* Pos: Nenhum retorno
+*/
 void endAllRectangle(List list, int swList);
 
 /*
@@ -44,12 +46,32 @@ double getRectangleX(Rectangle rectangle);
 */
 double getRectangleY(Rectangle rectangle);
 
+/*
+* Recupera um double com a altura de um retangulo
+* Pre: Um void* com o endereço do retangulo
+* Pos: Retorna um double com valor
+*/
 double getRectangleHeight(Rectangle rectangle);
 
+/*
+* Recupera um double com a largura de um retangulo
+* Pre: Um void* com o endereço do retangulo
+* Pos: Retorna um double com valor
+*/
 double getRectangleWidth(Rectangle rectangle);
 
+/*
+* Recupera um char* com a string da cor do preenchimento de um retangulo
+* Pre: Um void* com o endereço do retangulo
+* Pos: Retorna um char* com a cor
+*/
 char* getRectangleFill(Rectangle rectangle);
 
+/*
+* Recupera um char* com a string da cor da borda de um retangulo
+* Pre: Um void* com o endereço do retangulo
+* Pos: Retorna um char* com a cor
+*/
 char* getRectangleStroke(Rectangle rectangle);
 
 /*
@@ -66,10 +88,4 @@ void setRectangleFill(Rectangle rectangle, char fill[25]);
 */
 void setRectangleStroke(Rectangle rectangle, char stroke[25]);
 
-/*
-* Imprime no console os valores definidos em um retangulo
-* Pre: Um void* com o endereço do retangulo
-* Pos: Nenhum retorno
-*/
-void printInfos(Rectangle rectangle);
 #endif

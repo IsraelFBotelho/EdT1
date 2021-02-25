@@ -14,34 +14,16 @@ int main(int argc, char* argv[]){
     char *nameArqGeo = NULL;
     char *pathIn = NULL;
     char *nameArqQry = NULL;
-    char* nameArqSvg = NULL;
     // swList é um int que armazena 1 para usar lista dinamica e 0 para usar lista estatica
     int swList = 1;
     List listRect = NULL;
-    FILE * svg = NULL;
 
     readArgv(argc, argv, &pathOut, &pathIn, &nameArqGeo, &nameArqQry, &swList);
-    if(!pathOut && !nameArqGeo){
-        exit(1);
-    }
-    printf("%s\n%s\n%s\n%s\n",pathOut, pathIn, nameArqGeo, nameArqQry);
-
 
     readGeo(pathIn, nameArqGeo, &listRect, swList);
 
-    nameArqSvg = extractName(nameArqGeo);
-    printf("\n%s\n",nameArqSvg);
+    writeSvg(listRect,pathOut,nameArqGeo, swList);
 
-    createSvg(svg, pathOut, nameArqSvg);
-
-
-for(Node aux = getFirst(listRect, swList); aux ; aux = getNext(listRect, aux, swList)){
-
-    drawRectangle(svg, pathOut, nameArqSvg, getInfo(aux, swList));
-}
-    endSvg(svg, pathOut, nameArqSvg);
-
-    free(nameArqSvg);
     free(pathOut);
     free(nameArqGeo);
     free(pathIn);

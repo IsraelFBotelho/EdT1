@@ -3,11 +3,11 @@
 
 #include <stdio.h>
 #include "rectangle.h"
-
-void createSvg(FILE* svg, char* path, char* name);
-
-void endSvg(FILE* svg, char* path, char* name);
-
-void drawRectangle(FILE *svg, char* path, char* name, Rectangle rectangle);
+/*
+* Cria e Preenche um arquivo svg com os arquivos de uma lista passada para um diretorio de saida
+* Pre: Um vid* com o endereço da lista, Um char* com a string do caminho de saida, Um char* com a string do nome do SVG, Um int com o swList
+* Pos: Nenhum retorno
+*/
+void writeSvg(List list, char *pathOut, char * nameArq, int swList);
 
 #endif
