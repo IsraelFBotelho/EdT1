@@ -75,7 +75,7 @@ void drawRectangle(FILE *svg, char* path, char* name, Rectangle rectangle){
     id = getRectangleId(rectangle);
     fill = getRectangleFill(rectangle);
     stroke = getRectangleStroke(rectangle);
-// tristeza
+    
     fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\"/>\n",id, x, y, width, height, stroke, fill);
     fflush(svg);
     fclose(svg);
