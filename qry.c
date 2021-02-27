@@ -7,92 +7,57 @@
 #include "path.h"
 #include "svg.h"
 
-void setOverlapColor(Rectangle rect1, Rectangle rect2);
-int isOverlapped(Rectangle rect1, Rectangle rect2);
-char *getQryFileName(char* nameGeo, char* nameQry);
-void tpCommand(List list, int swList);
+FILE *getTxtFile(char* nameArq, char* pathOut){
+    char t[] = "txt";
+    char* nameTxt = t;
+    char *nameArqExtr =(char *) extractName(nameArq);
+    char *nameArqTxt = insertExtension(nameArqExtr, nameTxt);
+    char *fullPathTxt = catPath(pathOut, nameArqTxt);
 
-void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
+    FILE *txt = fopen(fullPathTxt, "w");
 
-    if(!nameQry){
-        return;
+    if(txt){
+        printf("Erro na criacao do TXT!!\n");
+        free(fullPathTxt);
+        exit(1);
     }
 
-    char id[30], command[30];
-    int k;
-    double x, y, height, width;
-
-    char* fullPathQry = catPath(pathIn, nameQry);
-
-    FILE *qry = fopen(fullPathQry, "r");
-
-    if(qry == NULL){
-        printf("\nArquivo .qry nao foi encontrado");
-        free(fullPathQry);
-        return;
-    }
-
-    while(!feof(qry)){
-        fscanf(qry,"%s",command);
-
-        if(strcmp(command, "tp") == 0){
-            fscanf(qry,"\n");
-            tpCommand(list, swList);
-            
-        }else if(strcmp(command, "tpr") == 0){
-
-        }else if(strcmp(command, "dpi") == 0){
-
-        }else if(strcmp(command, "dr") == 0){
-            
-        }else if(strcmp(command, "bbi") == 0){
-
-        }else if(strcmp(command, "bbid") == 0){
-
-        }else if(strcmp(command, "iid") == 0){
-
-        }else if(strcmp(command, "ddid") == 0){
-            
-        }
-    }
-
-    char* fullNameQry = getQryFileName(nameGeo,nameQry);
-
-    writeSvg(list, pathOut, fullNameQry, swList);
-
-
-    free(fullNameQry);
-    free(fullPathQry);
-    fclose(qry);
+    return txt;
+    
 }
 
-void tpCommand(List list, int swList){
-    Node *aux = getFirst(list,swList);
+char *getQryFileName(char* fullNameGeo, char* nameQry){
+    char* nameGeo = extractName(fullNameGeo);
+    char* fullName = malloc((strlen(nameGeo) + strlen(nameQry) + 2) *sizeof(char));
+    sprintf(fullName,"%s-%s",nameGeo,nameQry);
 
+    free(nameGeo);
+    return fullName;
+}
 
-    while(aux){
-        int test = 1;
-        for(Node *aux2 = getNext(list,aux,swList); aux2; aux2 = getNext(list,aux2,swList)){
-            if(isOverlapped(getInfo(aux, swList),getInfo(aux2, swList))){
-                setOverlapColor(getInfo(aux,swList),getInfo(aux2,swList));
-            }
-        }
-        for(Node *aux2 = getFirst(list,swList); aux2; aux2 = getNext(list,aux2,swList)){
-            if(isOverlapped(getInfo(aux,swList), getInfo(aux2, swList)) && aux != aux2){
-                test = 0;
-                break;
-            }
-        }
-        if(test && getInfo(aux,swList)){
-            Node *aux2 = aux;
-            aux = getNext(list,aux,swList);
-            Rectangle rect = getInfo(aux2,swList);
-            endRectangle(rect);
-            removeNode(list, aux2, swList);
-        }else{
-            aux = getNext(list,aux,swList);
-        }
+int isOverlapped(Rectangle rect1, Rectangle rect2){
+
+    if(!rect1 || !rect2){
+        return 0;
     }
+
+    double x1, x2, w1, w2, h1, h2, y1, y2;
+
+        x1 = getRectangleX(rect1);
+        x2 = getRectangleX(rect2);
+        y1 = getRectangleY(rect1);
+        y2 = getRectangleY(rect2);
+        w1 = getRectangleWidth(rect1);
+        w2 = getRectangleWidth(rect2);
+        h1 = getRectangleHeight(rect1);
+        h2 = getRectangleHeight(rect2);
+
+        if((x1 <= x2 && x1 + w1 >= x2) || (x2 <= x1 && x2 + w2 >= x1)){
+            if((y1 <= y2 && y1 + h1 >= y2) || (y2 <= y1 && y2 + h2 >= y1)){
+                return 1;
+            }
+        }
+        return 0;
 }
 
 void setOverlapColor(Rectangle rect1, Rectangle rect2){
@@ -141,36 +106,84 @@ void setOverlapColor(Rectangle rect1, Rectangle rect2){
     setRectangleFill(rect2, color);
 }
 
-int isOverlapped(Rectangle rect1, Rectangle rect2){
+void tpCommand(List list, int swList){
+    Node *aux = getFirst(list,swList);
 
-    if(!rect1 || !rect2){
-        return 0;
-    }
 
-    double x1, x2, w1, w2, h1, h2, y1, y2;
-
-        x1 = getRectangleX(rect1);
-        x2 = getRectangleX(rect2);
-        y1 = getRectangleY(rect1);
-        y2 = getRectangleY(rect2);
-        w1 = getRectangleWidth(rect1);
-        w2 = getRectangleWidth(rect2);
-        h1 = getRectangleHeight(rect1);
-        h2 = getRectangleHeight(rect2);
-
-        if((x1 <= x2 && x1 + w1 >= x2) || (x2 <= x1 && x2 + w2 >= x1)){
-            if((y1 <= y2 && y1 + h1 >= y2) || (y2 <= y1 && y2 + h2 >= y1)){
-                return 1;
+    while(aux){
+        int test = 1;
+        for(Node *aux2 = getNext(list,aux,swList); aux2; aux2 = getNext(list,aux2,swList)){
+            if(isOverlapped(getInfo(aux, swList),getInfo(aux2, swList))){
+                setOverlapColor(getInfo(aux,swList),getInfo(aux2,swList));
             }
         }
-        return 0;
+        for(Node *aux2 = getFirst(list,swList); aux2; aux2 = getNext(list,aux2,swList)){
+            if(isOverlapped(getInfo(aux,swList), getInfo(aux2, swList)) && aux != aux2){
+                test = 0;
+                break;
+            }
+        }
+        if(test && getInfo(aux,swList)){
+            Node *aux2 = aux;
+            aux = getNext(list,aux,swList);
+            Rectangle rect = getInfo(aux2,swList);
+            endRectangle(rect);
+            removeNode(list, aux2, swList);
+        }else{
+            aux = getNext(list,aux,swList);
+        }
+    }
 }
 
-char *getQryFileName(char* fullNameGeo, char* nameQry){
-    char* nameGeo = extractName(fullNameGeo);
-    char* fullName = malloc((strlen(nameGeo) + strlen(nameQry) + 2) *sizeof(char));
-    sprintf(fullName,"%s-%s",nameGeo,nameQry);
+void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
 
-    free(nameGeo);
-    return fullName;
+    if(!nameQry){
+        return;
+    }
+
+    char id[30], command[30];
+    int k;
+    double x, y, height, width;
+
+    char* fullPathQry = catPath(pathIn, nameQry);
+
+    FILE *qry = fopen(fullPathQry, "r");
+
+    if(qry == NULL){
+        printf("\nArquivo .qry nao foi encontrado");
+        free(fullPathQry);
+        return;
+    }
+
+    char* fullNameQry = getQryFileName(nameGeo,nameQry);
+
+    while(!feof(qry)){
+        fscanf(qry,"%s",command);
+
+        if(strcmp(command, "tp") == 0){
+            fscanf(qry,"\n");
+            tpCommand(list, swList);
+            
+        }else if(strcmp(command, "tpr") == 0){
+
+        }else if(strcmp(command, "dpi") == 0){
+
+        }else if(strcmp(command, "dr") == 0){
+            
+        }else if(strcmp(command, "bbi") == 0){
+
+        }else if(strcmp(command, "bbid") == 0){
+
+        }else if(strcmp(command, "iid") == 0){
+
+        }else if(strcmp(command, "ddid") == 0){
+            
+        }
+    }
+
+    writeSvg(list, pathOut, fullNameQry, swList);
+
+    free(fullNameQry);
+    free(fullPathQry);
+    fclose(qry);
 }
