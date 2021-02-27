@@ -14,6 +14,10 @@ void tpCommand(List list, int swList);
 
 void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
 
+    if(!nameQry){
+        return;
+    }
+
     char id[30], command[30];
     int k;
     double x, y, height, width;
@@ -32,8 +36,9 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
         fscanf(qry,"%s",command);
 
         if(strcmp(command, "tp") == 0){
-            printf("Passei aqui!!");
+            fscanf(qry,"\n");
             tpCommand(list, swList);
+            
         }else if(strcmp(command, "tpr") == 0){
 
         }else if(strcmp(command, "dpi") == 0){
@@ -62,10 +67,14 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
 }
 
 void tpCommand(List list, int swList){
-    for(Node *aux = getFirst(list,swList); aux;){
+    Node *aux = getFirst(list,swList);
+
+
+    while(aux){
         int test = 1;
         for(Node *aux2 = getNext(list,aux,swList); aux2; aux2 = getNext(list,aux2,swList)){
             if(isOverlapped(getInfo(aux, swList),getInfo(aux2, swList))){
+                printf("entrou");
                 setOverlapColor(getInfo(aux,swList),getInfo(aux2,swList));
             }
         }
@@ -150,8 +159,8 @@ int isOverlapped(Rectangle rect1, Rectangle rect2){
         h1 = getRectangleHeight(rect1);
         h2 = getRectangleHeight(rect2);
 
-        if((x1 <= x2 && x1 + h1 >= x2) || (x2 <= x1 && x2 + h2 >= x1)){
-            if((y1 <= y2 && y1 + w1 >= y2) || (y2 <= y1 && y2 + w2 >= y1)){
+        if((x1 <= x2 && x1 + w1 >= x2) || (x2 <= x1 && x2 + w2 >= x1)){
+            if((y1 <= y2 && y1 + h1 >= y2) || (y2 <= y1 && y2 + h2 >= y1)){
                 return 1;
             }
         }
