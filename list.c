@@ -201,16 +201,17 @@ int dGetListVisit(List list){
         Funções de Lista Estatica Simplesmente Encadeada
 */
 
-void sRelocateElement(List slist, Node snode){
-    SNodeStruct *snode_aux = (SNodeStruct *) snode;
+void sRelocateElement(List slist){
     SListStruct *slist_aux = (SListStruct *) slist;
 
-    while(snode_aux->next){
-        SNodeStruct *aux2 = snode_aux->next;
-        slist_aux->visit++;
-        snode_aux->info = aux2->info;
-        snode_aux = snode_aux->next;
-        slist_aux->visit++;
+    for(int i = 0; i < slist_aux->nx; i++){
+        if(slist_aux->array[i].info == NULL){
+            for(int j = i; j < slist_aux->size; j++){
+                slist_aux->array[j].info = slist_aux->array[j].next->info;
+            }
+            slist_aux->array[slist_aux->size - 2].next = NULL;
+            slist_aux->size--;
+        }
     }
 }
 
@@ -267,14 +268,33 @@ void sRemoveNode(List slist, Node snode){
     SListStruct *slist_aux = (SListStruct *) slist;
     SNodeStruct *snode_aux = (SNodeStruct *) snode;
 
-    if(slist_aux->size == 0){
-        return;
+    if(snode_aux == slist_aux->head){
+        slist_aux->head = snode_aux->next;
+        slist_aux->size--;
     }
-    sRelocateElement(slist, snode);
-    // slist_aux->array[slist_aux->size - 2].next = NULL;
-    slist_aux->tail = &(slist_aux->array[slist_aux->size - 2]);
-    slist_aux->tail->next = NULL;
-    slist_aux->size--;
+    for(SNodeStruct *aux = slist_aux->head; aux; aux = aux->next){
+
+        if(snode_aux == slist_aux->tail){
+            slist_aux->tail = NULL;
+        }
+
+        slist_aux->visit++;
+        if(aux->next == snode_aux){
+            aux->next = snode_aux->next;
+            slist_aux->visit++;
+            slist_aux->size--;
+            break;
+        }
+    }
+
+    // if(slist_aux->size == 0){
+    //     return;
+    // }
+    // sRelocateElement(slist, snode);
+    // // slist_aux->array[slist_aux->size - 2].next = NULL;
+    // slist_aux->tail = &(slist_aux->array[slist_aux->size - 2]);
+    // slist_aux->tail->next = NULL;
+    // slist_aux->size--;
 }
 
 Info sGetInfo(Node snode){

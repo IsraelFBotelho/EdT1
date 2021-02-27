@@ -72,15 +72,10 @@ void tpCommand(List list, int swList){
             aux = getNext(list,aux,swList);
             Rectangle rect = getInfo(aux2,swList);
             endRectangle(rect);
-            if(swList){
-                removeNode(list, aux2, swList);
-            }
+            removeNode(list, aux2, swList);
         }else{
             aux = getNext(list,aux,swList);
         }
-    }
-    if(!swList){
-        sRemoveAllNullNode(list,swList);
     }
 }
 
