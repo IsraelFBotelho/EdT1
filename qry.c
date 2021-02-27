@@ -74,7 +74,6 @@ void tpCommand(List list, int swList){
         int test = 1;
         for(Node *aux2 = getNext(list,aux,swList); aux2; aux2 = getNext(list,aux2,swList)){
             if(isOverlapped(getInfo(aux, swList),getInfo(aux2, swList))){
-                printf("entrou");
                 setOverlapColor(getInfo(aux,swList),getInfo(aux2,swList));
             }
         }
