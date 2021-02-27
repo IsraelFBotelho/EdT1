@@ -16,12 +16,15 @@ FILE *getTxtFile(char* nameArq, char* pathOut){
 
     FILE *txt = fopen(fullPathTxt, "w");
 
-    if(txt){
+    if(!txt){
         printf("Erro na criacao do TXT!!\n");
         free(fullPathTxt);
         exit(1);
     }
 
+    free(nameArqExtr);
+    free(nameArqTxt);
+    free(fullPathTxt);
     return txt;
     
 }
@@ -106,7 +109,7 @@ void setOverlapColor(Rectangle rect1, Rectangle rect2){
     setRectangleFill(rect2, color);
 }
 
-void tpCommand(List list, int swList){
+void tpCommand(List list, int swList, FILE* txt){
     Node *aux = getFirst(list,swList);
 
 
@@ -115,6 +118,7 @@ void tpCommand(List list, int swList){
         for(Node *aux2 = getNext(list,aux,swList); aux2; aux2 = getNext(list,aux2,swList)){
             if(isOverlapped(getInfo(aux, swList),getInfo(aux2, swList))){
                 setOverlapColor(getInfo(aux,swList),getInfo(aux2,swList));
+                fprintf(txt, "%s %s\n", getRectangleId(getInfo(aux,swList)), getRectangleId(getInfo(aux2,swList)));
             }
         }
         for(Node *aux2 = getFirst(list,swList); aux2; aux2 = getNext(list,aux2,swList)){
@@ -157,12 +161,15 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
 
     char* fullNameQry = getQryFileName(nameGeo,nameQry);
 
+    FILE *txt = getTxtFile(fullNameQry, pathOut);
+
     while(!feof(qry)){
         fscanf(qry,"%s",command);
 
         if(strcmp(command, "tp") == 0){
             fscanf(qry,"\n");
-            tpCommand(list, swList);
+            fprintf(txt,"tp\n");
+            tpCommand(list, swList, txt);
             
         }else if(strcmp(command, "tpr") == 0){
 
@@ -183,6 +190,7 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
 
     writeSvg(list, pathOut, fullNameQry, swList);
 
+    fclose(txt);
     free(fullNameQry);
     free(fullPathQry);
     fclose(qry);
