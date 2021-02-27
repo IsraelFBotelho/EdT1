@@ -201,20 +201,6 @@ int dGetListVisit(List list){
         Funções de Lista Estatica Simplesmente Encadeada
 */
 
-void sRelocateElement(List slist){
-    SListStruct *slist_aux = (SListStruct *) slist;
-
-    for(int i = 0; i < slist_aux->nx; i++){
-        if(slist_aux->array[i].info == NULL){
-            for(int j = i; j < slist_aux->size; j++){
-                slist_aux->array[j].info = slist_aux->array[j].next->info;
-            }
-            slist_aux->array[slist_aux->size - 2].next = NULL;
-            slist_aux->size--;
-        }
-    }
-}
-
 List sCreateList(int nx){
     SListStruct *new = (SListStruct *) malloc(sizeof(SListStruct));
 

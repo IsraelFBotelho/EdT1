@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include "qry.h"
 #include "list.h"
 #include "rectangle.h"
@@ -80,7 +79,6 @@ void tpCommand(List list, int swList){
 }
 
 void setOverlapColor(Rectangle rect1, Rectangle rect2){
-    srand(time(NULL));
 
     char color[30];
 
