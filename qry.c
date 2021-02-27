@@ -38,6 +38,21 @@ char *getQryFileName(char* fullNameGeo, char* nameQry){
     return fullName;
 }
 
+int isCovered(Rectangle rect, double x, double y, double height, double width){
+    double x_aux = getRectangleX(rect);
+    double y_aux = getRectangleY(rect);
+    double h_aux = getRectangleHeight(rect);
+    double w_aux = getRectangleWidth(rect);
+
+    if(x_aux >= x && (x + width) >= (x_aux + w_aux)){
+        if(y_aux >= y && (y + height) >= (y_aux + h_aux)){
+            return 1;
+        }
+    }
+    printf("x =%lf y =%lf h =%lf w =%lf",x_aux, y_aux, h_aux, w_aux);
+    return 0;
+}
+
 int isOverlapped(Rectangle rect1, Rectangle rect2){
 
     if(!rect1 || !rect2){
@@ -139,6 +154,24 @@ void tpCommand(List list, int swList, FILE* txt){
     }
 }
 
+void tprCommand(List list, int swList, FILE *txt, double x, double y, double height, double width){
+    Node *aux = getFirst(list, swList);
+
+    printf("x =%lf y =%lf w =%lf h =%lf", x, y, width, height);
+    while(aux){
+        if(!isCovered(getInfo(aux, swList), x, y, height, width)){
+            Node *aux2 = aux;
+            aux = getNext(list,aux,swList);
+            Rectangle rect = getInfo(aux2,swList);
+            endRectangle(rect);
+            removeNode(list, aux2, swList);
+        }else{
+            aux = getNext(list,aux,swList);
+        }
+    }
+    tpCommand(list, swList, txt);
+}
+
 void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
 
     if(!nameQry){
@@ -146,8 +179,8 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
     }
 
     char id[30], command[30];
-    int k;
-    double x, y, height, width;
+    int k = 0;
+    double x = 0, y = 0, height = 0, width = 0;
 
     char* fullPathQry = catPath(pathIn, nameQry);
 
@@ -172,9 +205,12 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
             tpCommand(list, swList, txt);
             
         }else if(strcmp(command, "tpr") == 0){
+            fscanf(qry, "%lf %lf %lf %lf\n", &x, &y, &width, &height);
+            fprintf(txt,"tpr\n");
+            tprCommand(list, swList, txt, x, y, height, width);
 
         }else if(strcmp(command, "dpi") == 0){
-
+            
         }else if(strcmp(command, "dr") == 0){
             
         }else if(strcmp(command, "bbi") == 0){
