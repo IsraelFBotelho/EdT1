@@ -50,10 +50,6 @@ void readArgv(int argc, char** argv, char** pathOut, char** pathIn, char** nameA
 
     if(!*pathOut || !*nameArqGeo){
         printf("Caminho de saida e/ou nome do arquivo .geo nao encontrado!\n");
-        free(pathOut);
-        free(nameArqGeo);
-        free(pathIn);
-        free(nameArqQry);
         exit(1);
     }
 

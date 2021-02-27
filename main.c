@@ -23,9 +23,10 @@ int main(int argc, char* argv[]){
 
     readGeo(pathIn, nameArqGeo, &listRect, swList);
 
-    tpCommand(listRect, swList);
-
     writeSvg(listRect, pathOut, nameArqGeo, swList);
+
+    readQry(pathIn, pathOut, nameArqQry, nameArqGeo, listRect, swList);
+
 
 
     free(pathOut);

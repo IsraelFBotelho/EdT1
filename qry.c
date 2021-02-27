@@ -9,14 +9,16 @@
 
 void setOverlapColor(Rectangle rect1, Rectangle rect2);
 int isOverlapped(Rectangle rect1, Rectangle rect2);
+char *getQryFileName(char* nameGeo, char* nameQry);
+void tpCommand(List list, int swList);
 
-void readQry(char *path, char *nameQry, char *nameGeo, List list, int swList){
+void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
 
     char id[30], command[30];
     int k;
     double x, y, height, width;
 
-    char* fullPathQry = catPath(path, nameQry);
+    char* fullPathQry = catPath(pathIn, nameQry);
 
     FILE *qry = fopen(fullPathQry, "r");
 
@@ -30,7 +32,8 @@ void readQry(char *path, char *nameQry, char *nameGeo, List list, int swList){
         fscanf(qry,"%s",command);
 
         if(strcmp(command, "tp") == 0){
-
+            printf("Passei aqui!!");
+            tpCommand(list, swList);
         }else if(strcmp(command, "tpr") == 0){
 
         }else if(strcmp(command, "dpi") == 0){
@@ -48,8 +51,14 @@ void readQry(char *path, char *nameQry, char *nameGeo, List list, int swList){
         }
     }
 
+    char* fullNameQry = getQryFileName(nameGeo,nameQry);
 
+    writeSvg(list, pathOut, fullNameQry, swList);
+
+
+    free(fullNameQry);
     free(fullPathQry);
+    fclose(qry);
 }
 
 void tpCommand(List list, int swList){
@@ -147,4 +156,13 @@ int isOverlapped(Rectangle rect1, Rectangle rect2){
             }
         }
         return 0;
+}
+
+char *getQryFileName(char* fullNameGeo, char* nameQry){
+    char* nameGeo = extractName(fullNameGeo);
+    char* fullName = malloc((strlen(nameGeo) + strlen(nameQry) + 2) *sizeof(char));
+    sprintf(fullName,"%s-%s",nameGeo,nameQry);
+
+    free(nameGeo);
+    return fullName;
 }
