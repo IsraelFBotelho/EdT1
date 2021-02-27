@@ -286,15 +286,6 @@ void sRemoveNode(List slist, Node snode){
             break;
         }
     }
-
-    // if(slist_aux->size == 0){
-    //     return;
-    // }
-    // sRelocateElement(slist, snode);
-    // // slist_aux->array[slist_aux->size - 2].next = NULL;
-    // slist_aux->tail = &(slist_aux->array[slist_aux->size - 2]);
-    // slist_aux->tail->next = NULL;
-    // slist_aux->size--;
 }
 
 Info sGetInfo(Node snode){
