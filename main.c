@@ -6,7 +6,6 @@
 #include "geo.h"
 #include "argv.h"
 #include "svg.h"
-#include "path.h"
 #include "qry.h"
 
 int main(int argc, char* argv[]){
@@ -26,8 +25,6 @@ int main(int argc, char* argv[]){
     writeSvg(listRect, pathOut, nameArqGeo, swList);
 
     readQry(pathIn, pathOut, nameArqQry, nameArqGeo, listRect, swList);
-
-
 
     free(pathOut);
     free(nameArqGeo);
