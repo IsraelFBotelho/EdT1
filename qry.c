@@ -38,6 +38,23 @@ char *getQryFileName(char* fullNameGeo, char* nameQry){
     return fullName;
 }
 
+int isInside(Rectangle rect, double x, double y){
+    if(!rect &&(!x && !y)){
+        return 0;
+    }
+    double x_aux = getRectangleX(rect);
+    double y_aux = getRectangleY(rect);
+    double h_aux = getRectangleHeight(rect);
+    double w_aux = getRectangleWidth(rect);
+
+    if(x >= x_aux && x <= x_aux + w_aux){
+        if(y >= y_aux && y <= y_aux + h_aux){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int isCovered(Rectangle rect, double x, double y, double height, double width){
     double x_aux = getRectangleX(rect);
     double y_aux = getRectangleY(rect);
@@ -49,7 +66,6 @@ int isCovered(Rectangle rect, double x, double y, double height, double width){
             return 1;
         }
     }
-    printf("x =%lf y =%lf h =%lf w =%lf",x_aux, y_aux, h_aux, w_aux);
     return 0;
 }
 
@@ -157,7 +173,6 @@ void tpCommand(List list, int swList, FILE* txt){
 void tprCommand(List list, int swList, FILE *txt, double x, double y, double height, double width){
     Node *aux = getFirst(list, swList);
 
-    printf("x =%lf y =%lf w =%lf h =%lf", x, y, width, height);
     while(aux){
         if(!isCovered(getInfo(aux, swList), x, y, height, width)){
             Node *aux2 = aux;
@@ -170,6 +185,25 @@ void tprCommand(List list, int swList, FILE *txt, double x, double y, double hei
         }
     }
     tpCommand(list, swList, txt);
+}
+
+void dpiCommand(List list, int swList, double x, double y, FILE *txt){
+
+    Node *aux = getFirst(list, swList);
+
+    while(aux){
+        if(isInside(getInfo(aux, swList), x, y)){
+            fprintf(txt, "%s\n", getRectangleId(getInfo(aux, swList)));
+            Node *aux2 = aux;
+            aux = getNext(list,aux,swList);
+            Rectangle rect = getInfo(aux2,swList);
+            endRectangle(rect);
+            removeNode(list, aux2, swList);
+        }else{
+            aux = getNext(list,aux,swList);
+        }
+    }
+
 }
 
 void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
@@ -210,7 +244,9 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
             tprCommand(list, swList, txt, x, y, height, width);
 
         }else if(strcmp(command, "dpi") == 0){
-            
+            fscanf(qry, "%lf %lf\n",&x,&y);
+            fprintf(txt,"dpi\n");
+
         }else if(strcmp(command, "dr") == 0){
             
         }else if(strcmp(command, "bbi") == 0){
