@@ -56,6 +56,18 @@ void drawRectangle(FILE *svg, Rectangle rectangle){
     fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"%d%%\" stroke-opacity=\"%d%%\"/>\n",id, x, y, width, height, stroke, fill, fill_op, stroke_op);
 }
 
+void drawBoundingBox(FILE *svg, List list_bb){
+
+    for(Node *aux = getFirst(list_bb, 1); aux; aux = getNext(list_bb, aux, 1)){
+        Rectangle *rectangle = getInfo(aux, 1);
+        double x = getRectangleX(rectangle);
+        double y = getRectangleY(rectangle);
+        double height = getRectangleHeight(rectangle);
+        double width = getRectangleWidth(rectangle);
+        fprintf(svg, "\t<rect id=\"Bounding Box\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"red\" fill=\"@\" fill-opacity=\"0%%\" stroke-opacity=\"100%%\" stroke-dasharray=\"4\" />\n",x, y, width, height);
+    }
+}
+
 void writeSvg(List list, char *pathOut, char * nameArq, int swList){
     char s[] = "svg";
     char* nameSvg = s;
@@ -70,6 +82,7 @@ void writeSvg(List list, char *pathOut, char * nameArq, int swList){
 
         drawRectangle(svg, getInfo(aux, swList));
     }
+    
 
     endSvg(svg);
 
