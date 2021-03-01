@@ -39,7 +39,7 @@ char *getQryFileName(char* fullNameGeo, char* nameQry){
 }
 
 int isInside(Rectangle rect, double x, double y){
-    if(!rect &&(!x && !y)){
+    if(!rect){
         return 0;
     }
     double x_aux = getRectangleX(rect);
@@ -55,7 +55,35 @@ int isInside(Rectangle rect, double x, double y){
     return 0;
 }
 
+int isInsideOf(Rectangle rect1, Rectangle rect2){
+
+    if(!rect1 || !rect2){
+        return 0;
+    }
+
+    double x1, x2, w1, w2, h1, h2, y1, y2;
+
+    x1 = getRectangleX(rect1);
+    x2 = getRectangleX(rect2);
+    y1 = getRectangleY(rect1);
+    y2 = getRectangleY(rect2);
+    w1 = getRectangleWidth(rect1);
+    w2 = getRectangleWidth(rect2);
+    h1 = getRectangleHeight(rect1);
+    h2 = getRectangleHeight(rect2);
+
+    if(x1 <= x2 && ((x1 + w1) >= (x2 + w2))){
+        if(y1 <= y2 && ((y1 + h1) >= (y2 + h2))){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int isCovered(Rectangle rect, double x, double y, double height, double width){
+    if(!rect){
+        return 0;
+    }
     double x_aux = getRectangleX(rect);
     double y_aux = getRectangleY(rect);
     double h_aux = getRectangleHeight(rect);
@@ -77,21 +105,21 @@ int isOverlapped(Rectangle rect1, Rectangle rect2){
 
     double x1, x2, w1, w2, h1, h2, y1, y2;
 
-        x1 = getRectangleX(rect1);
-        x2 = getRectangleX(rect2);
-        y1 = getRectangleY(rect1);
-        y2 = getRectangleY(rect2);
-        w1 = getRectangleWidth(rect1);
-        w2 = getRectangleWidth(rect2);
-        h1 = getRectangleHeight(rect1);
-        h2 = getRectangleHeight(rect2);
+    x1 = getRectangleX(rect1);
+    x2 = getRectangleX(rect2);
+    y1 = getRectangleY(rect1);
+    y2 = getRectangleY(rect2);
+    w1 = getRectangleWidth(rect1);
+    w2 = getRectangleWidth(rect2);
+    h1 = getRectangleHeight(rect1);
+    h2 = getRectangleHeight(rect2);
 
-        if((x1 <= x2 && x1 + w1 >= x2) || (x2 <= x1 && x2 + w2 >= x1)){
-            if((y1 <= y2 && y1 + h1 >= y2) || (y2 <= y1 && y2 + h2 >= y1)){
-                return 1;
-            }
+    if((x1 <= x2 && x1 + w1 >= x2) || (x2 <= x1 && x2 + w2 >= x1)){
+        if((y1 <= y2 && y1 + h1 >= y2) || (y2 <= y1 && y2 + h2 >= y1)){
+            return 1;
         }
-        return 0;
+    }
+    return 0;
 }
 
 void setOverlapColor(Rectangle rect1, Rectangle rect2){
@@ -206,6 +234,31 @@ void dpiCommand(List list, int swList, double x, double y, FILE *txt){
 
 }
 
+void drCommand(List list, int swList, char* id, FILE *txt){
+    Rectangle rect1 = NULL;
+    for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
+        if(strcmp(id, getRectangleId(getInfo(aux, swList))) == 0){
+            rect1 = getInfo(aux, swList);
+            break;
+        }
+    }
+    Node *aux = getFirst(list, swList);
+
+    while(aux){
+        if(isInsideOf(rect1, getInfo(aux, swList)) && getInfo(aux, swList) != rect1){
+            fprintf(txt, "%s\n", getRectangleId(getInfo(aux, swList)));
+            Node *aux2 = aux;
+            aux = getNext(list,aux,swList);
+            Rectangle rect = getInfo(aux2,swList);
+            endRectangle(rect);
+            removeNode(list, aux2, swList);
+        }else{
+            aux = getNext(list,aux,swList);
+        }
+    }    
+
+}
+
 void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
 
     if(!nameQry){
@@ -246,9 +299,13 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
         }else if(strcmp(command, "dpi") == 0){
             fscanf(qry, "%lf %lf\n",&x,&y);
             fprintf(txt,"dpi\n");
+            dpiCommand(list, swList, x, y, txt);
 
         }else if(strcmp(command, "dr") == 0){
-            
+            fscanf(qry, "%s\n", id);
+            fprintf(txt, "dr\n");
+            drCommand(list, swList, id, txt);
+
         }else if(strcmp(command, "bbi") == 0){
 
         }else if(strcmp(command, "bbid") == 0){
