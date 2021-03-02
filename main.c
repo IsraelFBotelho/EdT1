@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
 
     readGeo(pathIn, nameArqGeo, &listRect, swList);
 
-    writeSvg(listRect, pathOut, nameArqGeo, swList);
+    writeSvg(listRect, NULL, pathOut, nameArqGeo, swList);
 
     readQry(pathIn, pathOut, nameArqQry, nameArqGeo, listRect, swList);
 

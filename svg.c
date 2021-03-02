@@ -68,7 +68,7 @@ void drawBoundingBox(FILE *svg, List list_bb){
     }
 }
 
-void writeSvg(List list, char *pathOut, char * nameArq, int swList){
+void writeSvg(List list, List list_bb, char *pathOut, char * nameArq, int swList){
     char s[] = "svg";
     char* nameSvg = s;
     char *nameArqExtr =(char *) extractName(nameArq);
@@ -81,6 +81,10 @@ void writeSvg(List list, char *pathOut, char * nameArq, int swList){
     for(Node aux = getFirst(list, swList); aux ; aux = getNext(list, aux, swList)){
 
         drawRectangle(svg, getInfo(aux, swList));
+    }
+    
+    if(list_bb){
+        drawBoundingBox(svg, list_bb);
     }
     
 

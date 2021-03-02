@@ -8,6 +8,6 @@
 * Pre: Um vid* com o endereço da lista, Um char* com a string do caminho de saida, Um char* com a string do nome do SVG, Um int com o swList
 * Pos: Nenhum retorno
 */
-void writeSvg(List list, char *pathOut, char * nameArq, int swList);
+void writeSvg(List list, List list_bb, char *pathOut, char * nameArq, int swList);
 
 #endif

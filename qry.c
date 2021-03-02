@@ -259,6 +259,74 @@ void drCommand(List list, int swList, char* id, FILE *txt){
 
 }
 
+void bbiCommand(List list, List list_bb, int swList, double x, double y, FILE *txt){
+    double x_aux = 0, y_aux = 0, w_aux = 0, h_aux = 0, x2_aux = 0, y2_aux = 0;
+    int first = 1;
+
+    for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
+        if(isInside(getInfo(aux, swList), x, y)){
+
+
+            char color_fill[25];
+            char color_stroke[25];
+            strcpy(color_fill, getRectangleFill(getInfo(aux, swList)));
+            strcpy(color_stroke, getRectangleStroke(getInfo(aux, swList)));
+
+            fprintf(txt, "%s %s %s\n", getRectangleId(getInfo(aux, swList)), color_fill, color_stroke);
+
+            setRectangleFill(getInfo(aux, swList), color_stroke);
+            setRectangleStroke(getInfo(aux, swList), color_fill);
+
+
+            if(first){
+
+                x_aux = getRectangleX(getInfo(aux, swList));
+                y_aux = getRectangleY(getInfo(aux, swList));
+                x2_aux = getRectangleX(getInfo(aux, swList)) + getRectangleWidth(getInfo(aux, swList));
+                y2_aux = getRectangleY(getInfo(aux, swList)) + getRectangleHeight(getInfo(aux, swList));
+                first = 0;
+
+            }else{
+
+                if((getRectangleWidth(getInfo(aux, swList)) + getRectangleX(getInfo(aux, swList))) > x2_aux){
+                    x2_aux = (getRectangleWidth(getInfo(aux, swList)) + getRectangleX(getInfo(aux, swList)));
+                }
+
+                if((getRectangleHeight(getInfo(aux, swList)) + getRectangleY(getInfo(aux, swList))) > y2_aux){
+                    y2_aux = (getRectangleHeight(getInfo(aux, swList)) + getRectangleY(getInfo(aux, swList)));
+                }
+
+                if(getRectangleX(getInfo(aux, swList)) < x_aux){
+                    x_aux = getRectangleX(getInfo(aux, swList));
+                }
+
+                if(getRectangleY(getInfo(aux, swList)) < x_aux){
+                    y_aux = getRectangleY(getInfo(aux, swList));
+                }
+
+
+            }
+        }
+    }
+    h_aux = y2_aux - y_aux;
+    w_aux = x2_aux - x_aux;
+    Rectangle rect = createRectangle(x_aux, y_aux, h_aux, w_aux, "Bouding box", "@", "red");
+    insertElement(list_bb, rect, 1);
+}
+
+void bbidCommand(List list, List list_bb, int swList, char* id, FILE *txt){
+    Rectangle rect = NULL;
+    for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
+        if(strcmp(getRectangleId(getInfo(aux, swList)), id ) == 0){
+            rect = getInfo(aux, swList);
+            break;
+        }
+    }
+
+    
+
+}
+
 void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
 
     if(!nameQry){
@@ -282,6 +350,9 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
     char* fullNameQry = getQryFileName(nameGeo,nameQry);
 
     FILE *txt = getTxtFile(fullNameQry, pathOut);
+
+
+    List list_bb = createList(0, 1);
 
     while(!feof(qry)){
         fscanf(qry,"%s",command);
@@ -307,6 +378,9 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
             drCommand(list, swList, id, txt);
 
         }else if(strcmp(command, "bbi") == 0){
+            fscanf(qry, "%lf %lf\n", &x, &y);
+            fprintf(txt, "bbi\n");
+            bbiCommand(list, list_bb, swList, x, y, txt);
 
         }else if(strcmp(command, "bbid") == 0){
 
@@ -317,8 +391,10 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
         }
     }
 
-    writeSvg(list, pathOut, fullNameQry, swList);
+    writeSvg(list, list_bb, pathOut, fullNameQry, swList);
 
+    endAllRectangle(list_bb, 1);
+    endList(list_bb, 1);
     fclose(txt);
     free(fullNameQry);
     free(fullPathQry);
