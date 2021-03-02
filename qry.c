@@ -368,9 +368,10 @@ void iidCommand(List list, int swList, char *id, int k, FILE *txt){
     }
 
     if(k > 0){
+        node_aux = getNext(list, node_aux, swList);
         while(node_aux && k > 0){
             Rectangle rect = getInfo(node_aux, swList);
-            fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
+            fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s\n", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
             node_aux = getNext(list, node_aux, swList);
             k--;
         }
@@ -378,8 +379,8 @@ void iidCommand(List list, int swList, char *id, int k, FILE *txt){
         int i = 0;
         for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
             if(i >= id_n + k && i < id_n){
-            Rectangle rect = getInfo(aux, swList);
-            fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
+                Rectangle rect = getInfo(aux, swList);
+                fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s\n", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
             }
         i++;
         }
@@ -449,9 +450,12 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
         }else if(strcmp(command, "iid") == 0){
             fscanf(qry, "%s %d\n",id, &k);
             fprintf(txt, "iid\n");
+            
             iidCommand(list, swList, id, k, txt);
         }else if(strcmp(command, "diid") == 0){
-            
+            fscanf(qry, "%s %d\n", id, &k);
+            fprintf(txt, "diid\n");
+        
         }
     }
 
