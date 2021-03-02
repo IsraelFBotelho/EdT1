@@ -323,8 +323,67 @@ void bbidCommand(List list, List list_bb, int swList, char* id, FILE *txt){
         }
     }
 
-    
+    if(!rect){
+        return;
+    }
 
+    for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
+        if(isInsideOf(rect, getInfo(aux, swList))){
+
+            char color_fill[25];
+            char color_stroke[25];
+            strcpy(color_fill, getRectangleFill(getInfo(aux, swList)));
+            strcpy(color_stroke, getRectangleStroke(getInfo(aux, swList)));
+
+            fprintf(txt, "%s %s %s\n", getRectangleId(getInfo(aux, swList)), color_fill, color_stroke);
+
+            setRectangleFill(getInfo(aux, swList), color_stroke);
+            setRectangleStroke(getInfo(aux, swList), color_fill);
+
+        }
+    }
+
+    double x_aux = getRectangleX(rect);
+    double y_aux = getRectangleY(rect);
+    double h_aux = getRectangleHeight(rect);
+    double w_aux = getRectangleWidth(rect);
+    Rectangle rect1 = createRectangle(x_aux, y_aux, h_aux, w_aux, "Bouding box", "@", "red");
+    insertElement(list_bb, rect1, 1);
+}
+
+void iidCommand(List list, int swList, char *id, int k, FILE *txt){
+    Node node_aux = NULL;
+    int id_n = 0;
+
+    for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
+        if(strcmp(getRectangleId(getInfo(aux, swList)), id) == 0){
+            node_aux = aux;
+            break;
+        }
+        id_n++;
+    }
+
+    if(!node_aux){
+        return;
+    }
+
+    if(k > 0){
+        while(node_aux && k > 0){
+            Rectangle rect = getInfo(node_aux, swList);
+            fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
+            node_aux = getNext(list, node_aux, swList);
+            k--;
+        }
+    }else if(k < 0){
+        int i = 0;
+        for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
+            if(i >= id_n + k && i < id_n){
+            Rectangle rect = getInfo(aux, swList);
+            fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
+            }
+        i++;
+        }
+    }
 }
 
 void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
@@ -383,10 +442,15 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
             bbiCommand(list, list_bb, swList, x, y, txt);
 
         }else if(strcmp(command, "bbid") == 0){
+            fscanf(qry, "%s\n", id);
+            fprintf(txt, "bbid\n");
+            bbidCommand(list, list_bb, swList, id, txt);
 
         }else if(strcmp(command, "iid") == 0){
-
-        }else if(strcmp(command, "ddid") == 0){
+            fscanf(qry, "%s %d\n",id, &k);
+            fprintf(txt, "iid\n");
+            iidCommand(list, swList, id, k, txt);
+        }else if(strcmp(command, "diid") == 0){
             
         }
     }
