@@ -372,27 +372,15 @@ void iidCommand(List list, int swList, char *id, int k, FILE *txt){
         while(node_aux && k > 0){
             Rectangle rect = getInfo(node_aux, swList);
             fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s\n", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
-            Node *aux2 = node_aux;
-            node_aux = getNext(list,aux,swList);
-            Rectangle rect = getInfo(aux2,swList);
-            endRectangle(rect);
-            removeNode(list, aux2, swList);
+            node_aux = getNext(list, node_aux, swList);
             k--;
         }
     }else if(k < 0){
         int i = 0;
-        node_aux = getFirst(list, swList);
-        while(node_aux){
+        for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
             if(i >= id_n + k && i < id_n){
-                Rectangle rect = getInfo(node_aux, swList);
+                Rectangle rect = getInfo(aux, swList);
                 fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s\n", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
-                Node *aux2 = node_aux;
-                node_aux = getNext(list,node_aux,swList);
-                Rectangle rect = getInfo(aux2,swList);
-                endRectangle(rect);
-                removeNode(list, aux2, swList);
-            }else{
-                node_aux = getNext(list, node_aux, swList);
             }
         i++;
         }
@@ -420,20 +408,33 @@ void diidCommand(List list, int swList, char *id, int k, FILE *txt){
         while(node_aux && k > 0){
             Rectangle rect = getInfo(node_aux, swList);
             fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s\n", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
-            node_aux = getNext(list, node_aux, swList);
+            Node *aux2 = node_aux;
+            node_aux = getNext(list,node_aux,swList);
+            Rectangle rect2 = getInfo(aux2,swList);
+            endRectangle(rect2);
+            removeNode(list, aux2, swList);
             k--;
         }
     }else if(k < 0){
         int i = 0;
-        for(Node *aux = getFirst(list, swList); aux; aux = getNext(list, aux, swList)){
+        node_aux = getFirst(list, swList);
+        while(node_aux){
             if(i >= id_n + k && i < id_n){
-                Rectangle rect = getInfo(aux, swList);
+                Rectangle rect = getInfo(node_aux, swList);
                 fprintf(txt, "Id=%s X=%lf Y=%lf Height=%lf Width =%lf Fill=%s Stroke=%s\n", getRectangleId(rect), getRectangleX(rect), getRectangleY(rect), getRectangleHeight(rect), getRectangleWidth(rect), getRectangleFill(rect), getRectangleStroke(rect));
+                Node *aux2 = node_aux;
+                node_aux = getNext(list,node_aux,swList);
+                Rectangle rect2 = getInfo(aux2,swList);
+                endRectangle(rect2);
+                removeNode(list, aux2, swList);
+            }else{
+                node_aux = getNext(list, node_aux, swList);
             }
         i++;
         }
     }
 }
+
 
 void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list, int swList){
 
