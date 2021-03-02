@@ -64,7 +64,7 @@ void drawBoundingBox(FILE *svg, List list_bb){
         double y = getRectangleY(rectangle);
         double height = getRectangleHeight(rectangle);
         double width = getRectangleWidth(rectangle);
-        fprintf(svg, "\t<rect id=\"Bounding Box\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"red\" fill=\"@\" fill-opacity=\"0%%\" stroke-opacity=\"100%%\" stroke-dasharray=\"4\" />\n",x, y, width, height);
+        fprintf(svg, "\t<rect id=\"Bounding Box\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"red\" fill=\"@\" fill-opacity=\"0%%\" stroke-opacity=\"100%%\" stroke-dasharray=\"4\" stroke-width=\"2\"/>\n",x, y, width, height);
     }
 }
 
