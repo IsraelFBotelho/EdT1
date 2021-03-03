@@ -47,10 +47,12 @@ void drawRectangle(FILE *svg, Rectangle rectangle){
 
     if(strcmp(fill, "@") == 0){
         fill_op = 0;
+        fill = "none";
     }
 
     if(strcmp(stroke, "@") == 0){
         stroke_op = 0;
+        fill = "none";
     }
     
     fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"%d%%\" stroke-opacity=\"%d%%\"/>\n",id, x, y, width, height, stroke, fill, fill_op, stroke_op);
@@ -64,7 +66,7 @@ void drawBoundingBox(FILE *svg, List list_bb){
         double y = getRectangleY(rectangle);
         double height = getRectangleHeight(rectangle);
         double width = getRectangleWidth(rectangle);
-        fprintf(svg, "\t<rect id=\"Bounding Box\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"red\" fill=\"@\" fill-opacity=\"0%%\" stroke-opacity=\"100%%\" stroke-dasharray=\"4\" stroke-width=\"2\"/>\n",x, y, width, height);
+        fprintf(svg, "\t<rect id=\"Bounding Box\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"red\" fill=\"none\" fill-opacity=\"0%%\" stroke-opacity=\"100%%\" stroke-dasharray=\"4\" stroke-width=\"2\"/>\n",x, y, width, height);
     }
 }
 
