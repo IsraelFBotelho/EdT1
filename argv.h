@@ -6,6 +6,6 @@
 *      Uma referencia de char* do nome do .geo, Uma referencia de char* do nome do .qry, Um int com o swList
 * Pos: Nenhum retorno
 */
-void readArgv(int argc, char** argv, char** pathOut, char** pathIn, char** nameArqGeo, char** nameArqQry, int* swList);
+void readArgv(int argc, char** argv, char** pathOut, char** pathIn, char** nameArqGeo, char** nameArqQry, int* swList, int* swAnalysis, char** nameArqAnalysis, char ** titleAnalysys);
 
 #endif

@@ -31,7 +31,7 @@ List createList(int nx, int swList);
 * Pre: Um void* com o endereço da lista, Um int com o swList
 * Pos: Nenhum retorno
 */
-void endList(List list, int swList);
+void endList(List list, int swList, int* numberVisits);
 
 /*
 * Insere um elemento criando um no na ultima posição da lista dinamica se swList = 1, Insere um elemento criando um no na ultima posição da lista estatica se swList = 0
@@ -81,7 +81,5 @@ int getListSize(List list, int swList);
 * Pos: Um int com o valor
 */
 int getListVisit(List list, int swList);
-
-void sRemoveAllNullNode(List slist, int swList);
 
 #endif

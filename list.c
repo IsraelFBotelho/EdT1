@@ -50,7 +50,7 @@ List dCreateList(){
     return new;
 }
 
-void dEndList(List list){
+void dEndList(List list, int* numberVisits){
     ListStruct *list_aux = (ListStruct*) list;
     if(list_aux->size != 0){
         NodeStruct *aux;
@@ -60,7 +60,9 @@ void dEndList(List list){
             dRemoveNode(list, aux);
         }
     }
-
+    if(numberVisits){
+        *numberVisits = list_aux->visit;
+    }
     free(list_aux);
 }
 
@@ -222,9 +224,12 @@ List sCreateList(int nx){
 
 }
 
-void sEndList(List slist){
+void sEndList(List slist, int* numberVisits){
     SListStruct *slist_aux = (SListStruct *) slist;
     free(slist_aux->array);
+    if(numberVisits){
+        *numberVisits = slist_aux->visit;
+    }
     free(slist_aux);
 }
 
@@ -328,11 +333,11 @@ List createList(int nx, int swList){
 
 }
 
-void endList(List list, int swList){
+void endList(List list, int swList, int* numberVisits){
     if(swList){
-        dEndList(list);
+        dEndList(list, numberVisits);
     }else{
-        sEndList(list);
+        sEndList(list, numberVisits);
     }
 }
 

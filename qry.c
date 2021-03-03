@@ -511,7 +511,7 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
     writeSvg(list, list_bb, pathOut, fullNameQry, swList);
 
     endAllRectangle(list_bb, 1);
-    endList(list_bb, 1);
+    endList(list_bb, 1, NULL);
     fclose(txt);
     free(fullNameQry);
     free(fullPathQry);

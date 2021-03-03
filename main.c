@@ -14,11 +14,15 @@ int main(int argc, char* argv[]){
     char *nameArqGeo = NULL;
     char *pathIn = NULL;
     char *nameArqQry = NULL;
+    char *nameArqAnalysis = NULL;
+    char *titleAnalysys = NULL;
+    int numberVisits = 0;
+    int swAnalysis = 0;
     // swList é um int que armazena 1 para usar lista dinamica e 0 para usar lista estatica
     int swList = 1;
     List listRect = NULL;
 
-    readArgv(argc, argv, &pathOut, &pathIn, &nameArqGeo, &nameArqQry, &swList);
+    readArgv(argc, argv, &pathOut, &pathIn, &nameArqGeo, &nameArqQry, &swList, &swAnalysis, &nameArqAnalysis, &titleAnalysys);
 
     readGeo(pathIn, nameArqGeo, &listRect, swList);
 
@@ -31,7 +35,6 @@ int main(int argc, char* argv[]){
     free(pathIn);
     free(nameArqQry);
     endAllRectangle(listRect,swList);
-    printf("%d", getListVisit(listRect,swList));
-    endList(listRect, swList);
+    endList(listRect, swList, &numberVisits);
     return 0;
 }
