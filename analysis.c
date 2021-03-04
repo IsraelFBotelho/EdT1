@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "path.h"
-/*
+
 void startAnalysis(char* pathOut, int numberVisit, int listSize){
     char* fullPath = catPath(pathOut, "analysis.txt");
     FILE *txt = fopen(fullPath, "w");
@@ -100,4 +100,3 @@ void endAnalysis(char* pathOut, int numberVisit, int listSize, char* titleAnalys
 
     fprintf(svg, "</svg>");
 }
-*/

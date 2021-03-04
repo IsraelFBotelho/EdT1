@@ -130,37 +130,37 @@ void setOverlapColor(Rectangle rect1, Rectangle rect2){
 
     switch(r){
         case 1:
-            strcpy(color,"lightcyan");
+            strcpy(color,"cyan");
             break;
         case 2:
-            strcpy(color,"lightgoldenrodyellow");
+            strcpy(color,"yellow");
             break;
         case 3:
-            strcpy(color,"lightgrey");
+            strcpy(color,"blue");
             break;
         case 4:
-            strcpy(color,"lightsalmon");
+            strcpy(color,"crimson");
             break;
         case 5:
-            strcpy(color,"lightcoral");
+            strcpy(color,"coral");
             break;
         case 6:
-            strcpy(color,"lightskyblue");
+            strcpy(color,"firebrick");
             break;
         case 7:
-            strcpy(color,"lightyellow");
+            strcpy(color,"magenta");
             break;
         case 8:
-            strcpy(color,"lightpink");
+            strcpy(color,"lawngreen");
             break;
         case 9:
-            strcpy(color,"lightseagreen");
+            strcpy(color,"fuchsia");
             break;
         case 10:
-            strcpy(color,"lightsteelblue");
+            strcpy(color,"indigo");
             break;
         default:
-            strcpy(color,"black");
+            strcpy(color,"deepskyblue");
             break;
     }
 
@@ -187,8 +187,8 @@ void tpCommand(List list, int swList, FILE* txt){
             }
         }
         if(test && getInfo(aux,swList)){
-            setRectangleFill(getInfo(aux, swList), "@");
-            setRectangleStroke(getInfo(aux, swList), "@");
+            setRectangleFill(getInfo(aux, swList), "lightgrey");
+            setRectangleStroke(getInfo(aux, swList), "darkgray");
         }
         aux = getNext(list,aux,swList);
         
