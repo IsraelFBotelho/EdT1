@@ -34,8 +34,6 @@ void drawRectangle(FILE *svg, Rectangle rectangle){
 
     double x, y, height, width;
     char *id, *fill, *stroke;
-    int stroke_op = 100;
-    int fill_op = 50;
 
     x = getRectangleX(rectangle);
     y = getRectangleY(rectangle);
@@ -46,16 +44,14 @@ void drawRectangle(FILE *svg, Rectangle rectangle){
     stroke = getRectangleStroke(rectangle);
 
     if(strcmp(fill, "@") == 0){
-        fill_op = 0;
         fill = "none";
     }
 
     if(strcmp(stroke, "@") == 0){
-        stroke_op = 0;
         fill = "none";
     }
     
-    fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"%d%%\" stroke-opacity=\"%d%%\"/>\n",id, x, y, width, height, stroke, fill, fill_op, stroke_op);
+    fprintf(svg, "\t<rect id=\"%s\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"50%%\" />\n",id, x, y, width, height, stroke, fill);
 }
 
 void drawBoundingBox(FILE *svg, List list_bb){

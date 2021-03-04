@@ -114,8 +114,8 @@ int isOverlapped(Rectangle rect1, Rectangle rect2){
     h1 = getRectangleHeight(rect1);
     h2 = getRectangleHeight(rect2);
 
-    if((x1 <= x2 && x1 + w1 >= x2) || (x2 <= x1 && x2 + w2 >= x1)){
-        if((y1 <= y2 && y1 + h1 >= y2) || (y2 <= y1 && y2 + h2 >= y1)){
+    if((x1 < x2 && x1 + w1 > x2) || (x2 < x1 && x2 + w2 > x1)){
+        if((y1 < y2 && y1 + h1 > y2) || (y2 < y1 && y2 + h2 > y1)){
             return 1;
         }
     }
@@ -187,14 +187,11 @@ void tpCommand(List list, int swList, FILE* txt){
             }
         }
         if(test && getInfo(aux,swList)){
-            Node *aux2 = aux;
-            aux = getNext(list,aux,swList);
-            Rectangle rect = getInfo(aux2,swList);
-            endRectangle(rect);
-            removeNode(list, aux2, swList);
-        }else{
-            aux = getNext(list,aux,swList);
+            setRectangleFill(getInfo(aux, swList), "@");
+            setRectangleStroke(getInfo(aux, swList), "@");
         }
+        aux = getNext(list,aux,swList);
+        
     }
 }
 
@@ -203,14 +200,11 @@ void tprCommand(List list, int swList, FILE *txt, double x, double y, double hei
 
     while(aux){
         if(!isCovered(getInfo(aux, swList), x, y, height, width)){
-            Node *aux2 = aux;
-            aux = getNext(list,aux,swList);
-            Rectangle rect = getInfo(aux2,swList);
-            endRectangle(rect);
-            removeNode(list, aux2, swList);
-        }else{
-            aux = getNext(list,aux,swList);
+            setRectangleFill(getInfo(aux, swList), "@");
+            setRectangleStroke(getInfo(aux, swList), "@");
         }
+        aux = getNext(list,aux,swList);
+        
     }
     tpCommand(list, swList, txt);
 }
