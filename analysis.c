@@ -3,6 +3,7 @@
 #include <string.h>
 #include "path.h"
 
+
 void startAnalysis(char* pathOut, int numberVisit, int listSize){
     char* fullPath = catPath(pathOut, "analysis.txt");
     FILE *txt = fopen(fullPath, "w");
@@ -37,10 +38,10 @@ void continueAnalysis(char* pathOut, int numberVisit, int listSize){
 
 
 void endAnalysis(char* pathOut, int numberVisit, int listSize, char* titleAnalysis, char* nameArqAnalysis){
-    int x1 = 0, x2 = numberVisit, y1 = 0, y2 = listSize;
-    int visit, size;
+    double x1 = 0, x2 = numberVisit, y1 = 0, y2 = listSize;
+    double visit, size;
     char* fullPath = catPath(pathOut, "analysis.txt");
-    FILE *txt = fopen(fullPath, "a");
+    FILE *txt = fopen(fullPath, "r");
 
     free(fullPath);
     char *nameArq = insertExtension(nameArqAnalysis, "svg");
@@ -54,32 +55,8 @@ void endAnalysis(char* pathOut, int numberVisit, int listSize, char* titleAnalys
 
     fprintf(svg,"<svg xmlns=\"http://www.w3.org/2000/svg\">\n");
 
-    if(txt){
-        char command[15];
-        while(!feof(txt)){
-            fscanf(txt, "%s", command);
-            if(strcmp(command, "size/visit") == 0){
-                fscanf(txt, "%d %d\n", &size, &visit);
-                if(size > y2){
-                    y2 = size;
-                }
-                if(visit > x2){
-                    x2 = visit;
-                }
-            }
-        }
-    }
-
-
-    fprintf(svg, "\t<line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"%d\" width=\"2\"/>", y2);
-
-    fprintf(svg, "\t<line x1=\"0\" y1=\"0\" x2=\"%d\" y2=\"0\" width=\"2\"/>", x2);
-
-    fprintf(svg, "\t<circle cx=\"%d\" cy=\"%d\" r=\"2\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />", numberVisit, (y2 - listSize));
-
-    fprintf(svg, "\t<rect x=\"0\" y=\"%d\" width=\"%lf\" height=\"%lf\" stroke=\"black\" fill=\"none\"/>\n",);
-
-    rewind(txt);
+    fprintf(svg, "\t<circle cx=\"%lf\" cy=\"%lf\" r=\"10\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />\n", x2, y2);
+    fprintf(svg, "\t<rect x=\"0\" y=\"0\" width=\"%lf\" height=\"%lf\" stroke=\"black\" fill=\"none\" stroke-dasharray=\"1\"/>\n", x2, y2);
 
     if(!txt){
         printf("Arquivo temporario nao encontrado");
@@ -88,15 +65,29 @@ void endAnalysis(char* pathOut, int numberVisit, int listSize, char* titleAnalys
         while(!feof(txt)){
             fscanf(txt, "%s", command);
             if(strcmp(command, "size/visit") == 0){
-                fscanf(txt, "%d %d\n", &size, &visit);
-                fprintf(svg, "\t<circle cx=\"%d\" cy=\"%d\" r=\"2\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />", visit, (y2 - size));
+                fscanf(txt, "%lf %lf\n", &size, &visit);
+                fprintf(svg, "\t<circle cx=\"%lf\" cy=\"%lf\" r=\"10\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />\n", visit, size);
+                fprintf(svg, "\t<rect x=\"0\" y=\"0\" width=\"%lf\" height=\"%lf\" stroke=\"black\" fill=\"none\" stroke-dasharray=\"1\"/>\n", visit, size);
+                if(visit > x2){
+                    x2 = visit;
+                }
+                if(size > y2){
+                    y2 = size;
+                }
             }
         }
     }
+
+    fprintf(svg, "\t<line x1=\"0\" y1=\"0\" x2=\"%lf\" y2=\"0\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/>\n", x2);
+    fprintf(svg, "\t<line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"%lf\" style=\"stroke:rgb(255,0,0);stroke-width:2\"/>\n", y2);
+
     free(fullPath);
-    char* fullPath = catPath(pathOut, "analysis.txt");
+    fullPath = catPath(pathOut, "analysis.txt");
     remove(fullPath);
 
 
     fprintf(svg, "</svg>");
+    fclose(svg);
+    free(fullPath);
+    free(nameArq);
 }
