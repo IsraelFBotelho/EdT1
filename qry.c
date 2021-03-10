@@ -188,7 +188,7 @@ void tpCommand(List list, int swList, FILE* txt){
         }
         if(test && getInfo(aux,swList)){
             setRectangleFill(getInfo(aux, swList), "lightgrey");
-            setRectangleStroke(getInfo(aux, swList), "darkgray");
+            setRectangleStroke(getInfo(aux, swList), "lightgrey");
         }
         aux = getNext(list,aux,swList);
         
@@ -200,13 +200,38 @@ void tprCommand(List list, int swList, FILE *txt, double x, double y, double hei
 
     while(aux){
         if(!isCovered(getInfo(aux, swList), x, y, height, width)){
-            setRectangleFill(getInfo(aux, swList), "@");
-            setRectangleStroke(getInfo(aux, swList), "@");
+            setRectangleFill(getInfo(aux, swList), "lightgrey");
+            setRectangleStroke(getInfo(aux, swList), "lightgrey");
         }
         aux = getNext(list,aux,swList);
         
     }
-    tpCommand(list, swList, txt);
+
+    aux = getFirst(list,swList);
+
+
+    while(aux){
+        int test = 1;
+        if(isCovered(getInfo(aux, swList), x, y, height, width)){
+            for(Node *aux2 = getNext(list,aux,swList); aux2; aux2 = getNext(list,aux2,swList)){
+                if(isOverlapped(getInfo(aux, swList),getInfo(aux2, swList)) && isCovered(getInfo(aux2, swList), x, y, height, width)){
+                    setOverlapColor(getInfo(aux,swList),getInfo(aux2,swList));
+                    fprintf(txt, "%s %s\n", getRectangleId(getInfo(aux,swList)), getRectangleId(getInfo(aux2,swList)));
+                }
+            }
+            for(Node *aux2 = getFirst(list,swList); aux2; aux2 = getNext(list,aux2,swList)){
+                if(isOverlapped(getInfo(aux,swList), getInfo(aux2, swList)) && (aux != aux2 && isCovered(getInfo(aux2, swList), x, y, height, width))){
+                    test = 0;
+                    break;
+                }
+            }
+            if(test && getInfo(aux,swList)){
+                setRectangleFill(getInfo(aux, swList), "lightgrey");
+                setRectangleStroke(getInfo(aux, swList), "lightgrey");
+            }
+        }
+        aux = getNext(list,aux,swList);
+    }
 }
 
 void dpiCommand(List list, int swList, double x, double y, FILE *txt){
