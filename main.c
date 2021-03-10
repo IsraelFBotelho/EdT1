@@ -53,7 +53,8 @@ int main(int argc, char* argv[]){
     }
 
 
-
+    free(titleAnalysys);
+    free(nameArqAnalysis);
     free(pathOut);
     free(nameArqGeo);
     free(pathIn);

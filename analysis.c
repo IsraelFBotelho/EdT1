@@ -78,6 +78,7 @@ void endAnalysis(char* pathOut, int numberVisit, int listSize, char* titleAnalys
         }
     }
 
+
     fprintf(svg, "\t<line x1=\"0\" y1=\"0\" x2=\"%lf\" y2=\"0\" style=\"stroke:#000000\"/>\n", x2);
     fprintf(svg, "\t<line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"%lf\" style=\"stroke:#000000\"/>\n", y2);
     fprintf(svg, "\t<text x=\"%lf\" y=\"%lf\">%s</text>\n", (x2/2), (y2+5), titleAnalysis);
@@ -89,8 +90,10 @@ void endAnalysis(char* pathOut, int numberVisit, int listSize, char* titleAnalys
     fullPath = catPath(pathOut, "analysis.txt");
     remove(fullPath);
 
-
     fprintf(svg, "</svg>");
+    if(txt){
+        fclose(txt);
+    }
     fclose(svg);
     free(fullPath);
     free(nameArq);
