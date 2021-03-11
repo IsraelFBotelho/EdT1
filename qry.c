@@ -188,7 +188,7 @@ void tpCommand(List list, int swList, FILE* txt){
         }
         if(test && getInfo(aux,swList)){
             setRectangleFill(getInfo(aux, swList), "lightgrey");
-            setRectangleStroke(getInfo(aux, swList), "lightgrey");
+            setRectangleStroke(getInfo(aux, swList), "darkgrey");
         }
         aux = getNext(list,aux,swList);
         
@@ -201,7 +201,7 @@ void tprCommand(List list, int swList, FILE *txt, double x, double y, double hei
     while(aux){
         if(!isCovered(getInfo(aux, swList), x, y, height, width)){
             setRectangleFill(getInfo(aux, swList), "lightgrey");
-            setRectangleStroke(getInfo(aux, swList), "lightgrey");
+            setRectangleStroke(getInfo(aux, swList), "darkgrey");
         }
         aux = getNext(list,aux,swList);
         
@@ -227,7 +227,7 @@ void tprCommand(List list, int swList, FILE *txt, double x, double y, double hei
             }
             if(test && getInfo(aux,swList)){
                 setRectangleFill(getInfo(aux, swList), "lightgrey");
-                setRectangleStroke(getInfo(aux, swList), "lightgrey");
+                setRectangleStroke(getInfo(aux, swList), "darkgrey");
             }
         }
         aux = getNext(list,aux,swList);

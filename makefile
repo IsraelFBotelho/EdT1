@@ -1,5 +1,5 @@
 # Name of the project
-PROJ_NAME=progr
+objects = progrest progrdin
 
 # .c files
 C_SOURCE=$(wildcard *.c)
@@ -27,9 +27,9 @@ LINKER_FLAGS = -lm
 #
 # Compilation and linking
 #
-all: $(PROJ_NAME)
+all: $(objects)
 
-$(PROJ_NAME): $(OBJ)
+$(objects): $(OBJ)
 	$(CC) -o $@ $^ $(CC_FLAGS) $(LINKER_FLAGS)
 
 %.o: %.c %.h
@@ -39,4 +39,4 @@ main.o: main.c $(H_SOURCE)
 	$(CC) -o $@ $< -c $(CC_FLAGS)
 
 clean:
-	rm -rf *.o $(PROJ_NAME) *~
+	rm -rf *.o $(objects) *~
