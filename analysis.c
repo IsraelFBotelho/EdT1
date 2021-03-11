@@ -85,15 +85,15 @@ void endAnalysis(char* pathOut, int numberVisit, int listSize, char* titleAnalys
     fprintf(svg, "\t<text x=\"%lf\" y=\"0\">Nós Percorridos</text>\n", (x2+5));
     fprintf(svg, "\t<text x=\"0\" y=\"%lf\">Tamanho lista</text>\n", (y2+5));
 
+    if(txt){
+        fclose(txt);
+    }
 
     free(fullPath);
     fullPath = catPath(pathOut, "analysis.txt");
     remove(fullPath);
 
     fprintf(svg, "</svg>");
-    if(txt){
-        fclose(txt);
-    }
     fclose(svg);
     free(fullPath);
     free(nameArq);
