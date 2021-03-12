@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
 
     numberListSize = getListSize(listRect, swList);
 
-    writeSvg(listRect, NULL, pathOut, nameArqGeo, swList);
+    writeSvg(listRect, NULL, NULL, pathOut, nameArqGeo, swList);
 
     readQry(pathIn, pathOut, nameArqQry, nameArqGeo, listRect, swList);
 

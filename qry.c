@@ -6,6 +6,7 @@
 #include "rectangle.h"
 #include "path.h"
 #include "svg.h"
+#include "circle.h"
 
 FILE *getTxtFile(char* nameArq, char* pathOut){
     char t[] = "txt";
@@ -278,7 +279,7 @@ void drCommand(List list, int swList, char* id, FILE *txt){
 
 }
 
-void bbiCommand(List list, List list_bb, int swList, double x, double y, FILE *txt){
+void bbiCommand(List list, List list_bb, List list_c, int swList, double x, double y, FILE *txt){
     double x_aux = 0, y_aux = 0, w_aux = 0, h_aux = 0, x2_aux = 0, y2_aux = 0;
     int first = 1;
 
@@ -331,6 +332,8 @@ void bbiCommand(List list, List list_bb, int swList, double x, double y, FILE *t
     w_aux = x2_aux - x_aux;
     Rectangle rect = createRectangle(x_aux, y_aux, h_aux, w_aux, "Bouding box", "@", "red");
     insertElement(list_bb, rect, 1);
+    Circle circ = createCircle(x, y, 1, "bbi", "red", "lime");
+    insertElement(list_c, circ, 1);
 }
 
 void bbidCommand(List list, List list_bb, int swList, char* id, FILE *txt){
@@ -482,6 +485,8 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
 
     List list_bb = createList(0, 1);
 
+    List list_c = createList(0, 1);
+
     while(!feof(qry)){
         fscanf(qry,"%s",command);
 
@@ -508,7 +513,7 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
         }else if(strcmp(command, "bbi") == 0){
             fscanf(qry, "%lf %lf\n", &x, &y);
             fprintf(txt, "bbi\n");
-            bbiCommand(list, list_bb, swList, x, y, txt);
+            bbiCommand(list, list_bb, list_c, swList, x, y, txt);
 
         }else if(strcmp(command, "bbid") == 0){
             fscanf(qry, "%s\n", id);
@@ -527,10 +532,12 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
         }
     }
 
-    writeSvg(list, list_bb, pathOut, fullNameQry, swList);
+    writeSvg(list, list_bb, list_c, pathOut, fullNameQry, swList);
 
     endAllRectangle(list_bb, 1);
     endList(list_bb, 1, NULL);
+    endAllCircle(list_c, 1);
+    endList(list_c, 1, NULL);
     fclose(txt);
     free(fullNameQry);
     free(fullPathQry);
