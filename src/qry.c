@@ -478,7 +478,9 @@ void readQry(char *pathIn,char* pathOut ,char *nameQry, char *nameGeo, List list
         return;
     }
 
-    char* fullNameQry = getQryFileName(nameGeo,nameQry);
+    char* aux = extractName(nameQry);
+    char* fullNameQry = getQryFileName(nameGeo, aux);\
+    free(aux);
 
     FILE *txt = getTxtFile(fullNameQry, pathOut);
 

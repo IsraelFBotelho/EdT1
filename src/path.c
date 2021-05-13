@@ -6,14 +6,18 @@
 
 char* extractName(char* path_aux){
 
-    char * path = (char *) malloc((strlen(path_aux) + 1) *sizeof(char));
+    char *path = (char *) malloc((strlen(path_aux) + 1) *sizeof(char));
     strcpy(path,path_aux);
 
-    char *name = NULL;
+    char *aux = NULL;
 
-    name = strchr(path, '/') != NULL ? strrchr(path, '/') + 1 : path;
-    name = strtok(name, ".");
+    aux = strchr(path, '/') != NULL ? strrchr(path, '/') + 1 : path;
+    aux = strtok(aux, ".");
 
+    char *name = malloc((strlen(aux) +1) *sizeof(char));
+    strcpy(name,aux);
+
+    free(path);
     return name;
 }
 
